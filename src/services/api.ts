@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { Message, ProofChain, BlockStatus, ValidationResult, SearchFilters } from '@/types';
 
-const API_URL = process.env.NEXT_APP_BACKEND_ENDPOINT || 'http://localhost:8000';
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || 'http://localhost:8000';
 
 const ApiClient = axios.create({
   baseURL: API_URL,
