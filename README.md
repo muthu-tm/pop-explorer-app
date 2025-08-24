@@ -1,4 +1,4 @@
-# QDIP Proof Explorer Dashboard
+# Proof of Proof Explorer Dashboard
 
 A modern Next.js dashboard application for exploring QDIP proofs, messages, and block status. This app has been converted from a Vue.js HTML application to a React-based Next.js application while maintaining the same design and functionality.
 
@@ -30,7 +30,7 @@ A modern Next.js dashboard application for exploring QDIP proofs, messages, and 
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd pop-block-explorer
+cd pop-explorer-app
 ```
 
 2. Install dependencies:
