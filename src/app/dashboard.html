@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POP Block Explorer Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-50">
+    <div id="app" class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-6">
+                    <div class="flex items-center">
+                        <h1 class="text-3xl font-bold text-gray-900">QDIP Proof Explorer</h1>
+                        <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                            Live
+                        </span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button @click="refreshData" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                            Refresh Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Error Alert -->
+        <div v-if="showErrorAlert" class="fixed top-4 right-4 z-50 max-w-md">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                <span class="block sm:inline">{{ errorMessage }}</span>
+                <button @click="clearError" class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                    <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <title>Close</title>
+                        <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 0 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 0 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Success Alert -->
+        <div v-if="showSuccessAlert" class="fixed top-4 right-4 z-50 max-w-md">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+                <span class="block sm:inline">{{ successMessage }}</span>
+                <button @click="clearSuccess" class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                    <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <title>Close</title>
+                        <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 0 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 0 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <!-- Search Section -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <h2 class="text-lg font-medium text-gray-900 mb-4">Search & Filter</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Block Number</label>
+                        <input v-model="searchFilters.blockNumber" type="number" placeholder="Enter block number" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Thread ID</label>
+                        <input v-model="searchFilters.threadID" type="number" placeholder="Enter thread ID" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Leaf Index</label>
+                        <input v-model="searchFilters.leafIndex" type="number" placeholder="Enter leaf index" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="flex items-end">
+                        <button @click="searchData" :disabled="loading" class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-md text-sm font-medium">
+                            <span v-if="loading">Searching...</span>
+                            <span v-else>Search</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="bg-white shadow rounded-lg">
+                <div class="border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-8 px-6">
+                        <button v-for="tab in tabs" :key="tab.id"
+                                @click="activeTab = tab.id"
+                                :class="[
+                                    activeTab === tab.id
+                                        ? 'border-indigo-500 text-indigo-600'
+                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                                    'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                                ]">
+                            {{ tab.name }}
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="p-6">
+                    <!-- Messages Tab -->
+                    <div v-if="activeTab === 'messages'" class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">Messages</h3>
+                            <button @click="loadMessages" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                                Load Messages
+                            </button>
+                        </div>
+                        <div v-if="messages.length === 0" class="text-center py-8 text-gray-500">
+                            No messages found. Use the search filters above or click "Load Messages" to fetch data.
+                        </div>
+                        <div v-else class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Block</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thread</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Leaf</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Content</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hash</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Micro Root</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr v-for="msg in messages" :key="`${msg.block_number}-${msg.thread_id}-${msg.leaf_index}`">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ msg.block_number }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ msg.thread_id }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ msg.leaf_index }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">{{ msg.original }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-500 font-mono">{{ formatHash(msg.hash) }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-500 font-mono">{{ formatHash(msg.microRoot) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Proof Chains Tab -->
+                    <div v-if="activeTab === 'proofs'" class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">Proof Chains</h3>
+                            <button @click="loadProofChain" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                                Load Proof Chain
+                            </button>
+                        </div>
+                        <div v-if="!currentProofChain" class="text-center py-8 text-gray-500">
+                            No proof chain loaded. Use the search filters and click "Load Proof Chain" to fetch data.
+                        </div>
+                        <div v-else class="space-y-4">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="font-medium text-gray-900 mb-2">Proof Chain Details</h4>
+                                <div class="grid grid-cols-3 gap-4 text-sm">
+                                    <div><span class="font-medium">Block:</span> {{ currentProofChain.block_number }}</div>
+                                    <div><span class="font-medium">Thread:</span> {{ currentProofChain.thread_id }}</div>
+                                    <div><span class="font-medium">Leaf:</span> {{ currentProofChain.leaf_index }}</div>
+                                </div>
+                            </div>
+                            <div v-for="(layer, index) in currentProofChain.proof_chain" :key="index" class="border border-gray-200 rounded-lg p-4">
+                                <h5 class="font-medium text-gray-900 mb-2">Layer {{ layer.layer_index }} ({{ getLayerName(layer.layer_index) }})</h5>
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div><span class="font-medium">Merkle Index:</span> {{ layer.merkle_index }}</div>
+                                    <div><span class="font-medium">Root:</span> <span class="font-mono text-gray-600">{{ formatHash(layer.root) }}</span></div>
+                                </div>
+                                <div class="mt-2">
+                                    <span class="font-medium text-sm">Merkle Path:</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div v-for="(hash, hashIndex) in layer.merkle_path" :key="hashIndex" 
+                                             class="font-mono text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                                            {{ formatHash(hash) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Block Status Tab -->
+                    <div v-if="activeTab === 'status'" class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">Block Status</h3>
+                            <button @click="loadBlockStatus" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                                Load Status
+                            </button>
+                        </div>
+                        <div v-if="blockStatus.length === 0" class="text-center py-8 text-gray-500">
+                            No block status found. Click "Load Status" to fetch data.
+                        </div>
+                        <div v-else class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Block Number</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr v-for="status in blockStatus" :key="status.block_number">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ status.block_number }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span :class="getStatusClass(status.status)" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+                                                {{ status.status }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <button @click="viewBlock(status.block_number)" class="text-indigo-600 hover:text-indigo-900">
+                                                View Details
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Validation Tab -->
+                    <div v-if="activeTab === 'validation'" class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">Proof Validation</h3>
+                            <button @click="validateProof" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                                Validate Proof
+                            </button>
+                        </div>
+                        <div v-if="!validationResult" class="text-center py-8 text-gray-500">
+                            No validation result. Use the search filters and click "Validate Proof" to validate a proof chain.
+                        </div>
+                        <div v-else class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-900 mb-2">Validation Result</h4>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div><span class="font-medium">Valid:</span> 
+                                    <span :class="validationResult.valid ? 'text-green-600' : 'text-red-600'">
+                                        {{ validationResult.valid ? 'Yes' : 'No' }}
+                                    </span>
+                                </div>
+                                <div><span class="font-medium">Proof Layers:</span> {{ validationResult.proof_layers }}</div>
+                                <div v-if="validationResult.error_message" class="col-span-2">
+                                    <span class="font-medium text-red-600">Error:</span> {{ validationResult.error_message }}
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <span class="font-medium text-sm">Computed Root:</span>
+                                <div class="mt-1 font-mono text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                                    {{ validationResult.root }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    activeTab: 'messages',
+                    tabs: [
+                        { id: 'messages', name: 'Messages' },
+                        { id: 'proofs', name: 'Proof Chains' },
+                        { id: 'status', name: 'Block Status' },
+                        { id: 'validation', name: 'Validation' }
+                    ],
+                    searchFilters: {
+                        blockNumber: '',
+                        threadID: '',
+                        leafIndex: ''
+                    },
+                    messages: [],
+                    currentProofChain: null,
+                    blockStatus: [],
+                    validationResult: null,
+                    loading: false,
+                    errorMessage: '',
+                    showErrorAlert: false,
+                    successMessage: '',
+                    showSuccessAlert: false
+                }
+            },
+            methods: {
+                showError(message) {
+                    this.errorMessage = message;
+                    this.showErrorAlert = true;
+                    setTimeout(() => {
+                        this.showErrorAlert = false;
+                    }, 5000);
+                },
+
+                clearError() {
+                    this.showErrorAlert = false;
+                    this.errorMessage = '';
+                },
+
+                showSuccess(message) {
+                    this.successMessage = message;
+                    this.showSuccessAlert = true;
+                    setTimeout(() => {
+                        this.showSuccessAlert = false;
+                    }, 3000);
+                },
+
+                clearSuccess() {
+                    this.showSuccessAlert = false;
+                    this.successMessage = '';
+                },
+
+                async refreshData() {
+                    this.loading = true;
+                    try {
+                        // Only load block status by default, not messages
+                        await this.loadBlockStatus();
+                    } catch (error) {
+                        console.error('Error refreshing data:', error);
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                async loadMessages() {
+                    try {
+                        if (!this.searchFilters.blockNumber || this.searchFilters.blockNumber === '') {
+                            this.showError('Please provide a block number');
+                            return;
+                        }
+
+                        const params = { block: this.searchFilters.blockNumber };
+                        
+                        // Only add thread and leaf parameters if they are specified
+                        if (this.searchFilters.threadID !== undefined && this.searchFilters.threadID !== '') {
+                            params.thread = this.searchFilters.threadID;
+                        }
+                        if (this.searchFilters.leafIndex !== undefined && this.searchFilters.leafIndex !== '') {
+                            params.leaf = this.searchFilters.leafIndex;
+                        }
+                        
+                        const response = await axios.get('/messages', { params });
+                        this.messages = response.data.messages || [];
+                        if (this.messages.length > 0) {
+                            this.showSuccess(`Loaded ${this.messages.length} messages successfully`);
+                        } else {
+                            this.showSuccess('No messages found for the specified criteria');
+                        }
+                    } catch (error) {
+                        console.error('Error loading messages:', error);
+                        this.showError(`Failed to load messages: ${error.response?.data?.error || error.message}`);
+                        this.messages = [];
+                    }
+                },
+
+                async loadProofChain() {
+                    if (!this.searchFilters.blockNumber || this.searchFilters.blockNumber === '') {
+                        this.showError('Please provide block number');
+                        return;
+                    }
+                    if (!this.searchFilters.threadID || this.searchFilters.threadID === '') {
+                        this.showError('Please provide thread ID');
+                        return;
+                    }
+                    if (!this.searchFilters.leafIndex || this.searchFilters.leafIndex === '') {
+                        this.showError('Please provide leaf index');
+                        return;
+                    }
+
+                    try {
+                        const params = {
+                            block: this.searchFilters.blockNumber,
+                            thread: this.searchFilters.threadID,
+                            leaf: this.searchFilters.leafIndex
+                        };
+                        
+                        const response = await axios.get('/finalproof', { params });
+                        this.currentProofChain = response.data;
+                        this.showSuccess('Proof chain loaded successfully');
+                    } catch (error) {
+                        console.error('Error loading proof chain:', error);
+                        this.showError(`Failed to load proof chain: ${error.response?.data?.error || error.message}`);
+                        this.currentProofChain = null;
+                    }
+                },
+
+                async loadBlockStatus() {
+                    try {
+                        const response = await axios.get('/status');
+                        if (response.data && Array.isArray(response.data)) {
+                            this.blockStatus = response.data;
+                        } else {
+                            this.blockStatus = [];
+                        }
+                        if (this.blockStatus.length > 0) {
+                            this.showSuccess(`Loaded ${this.blockStatus.length} block statuses successfully`);
+                        } else {
+                            this.showSuccess('No block statuses found');
+                        }
+                    } catch (error) {
+                        console.error('Error loading block status:', error);
+                        this.showError(`Failed to load block status: ${error.response?.data?.error || error.message}`);
+                        this.blockStatus = [];
+                    }
+                },
+
+                async validateProof() {
+                    if (!this.searchFilters.blockNumber || this.searchFilters.blockNumber === '') {
+                        this.showError('Please provide block number');
+                        return;
+                    }
+
+                    const params = {};
+                    if (this.searchFilters.blockNumber && this.searchFilters.blockNumber !== '') {
+                        params.block = this.searchFilters.blockNumber;
+                    }
+                    // Set default values for thread and leaf if not specified
+                    if (this.searchFilters.threadID !== undefined && this.searchFilters.threadID !== '') {
+                        params.thread = this.searchFilters.threadID;
+                    } else {
+                        params.thread = '0'; // Default to thread 0
+                    }
+                    if (this.searchFilters.leafIndex !== undefined && this.searchFilters.leafIndex !== '') {
+                        params.leaf = this.searchFilters.leafIndex;
+                    } else {
+                        params.leaf = '0'; // Default to leaf 0
+                    }
+
+                    // if (!this.searchFilters.threadID || this.searchFilters.threadID === '') {
+                    //     this.showError('Please provide thread ID for validation');
+                    //     return;
+                    // }
+
+                    // if (!this.searchFilters.leafIndex || this.searchFilters.leafIndex === '') {
+                    //     this.showError('Please provide leaf index for validation');
+                    //     return;
+                    // }
+
+                    // const params = {
+                    //     block: this.searchFilters.blockNumber,
+                    //     thread: this.searchFilters.threadID,
+                    //     leaf: this.searchFilters.leafIndex
+                    // };
+
+                    try {
+                        // const params = {
+                        //     block: this.searchFilters.blockNumber,
+                        //     thread: this.searchFilters.threadID,
+                        //     leaf: this.searchFilters.leafIndex
+                        // };
+                        
+                        const response = await axios.get('/validate', { params });
+                        this.validationResult = response.data;
+                        this.showSuccess('Proof validation completed successfully');
+                    } catch (error) {
+                        console.error('Error validating proof:', error);
+                        this.showError(`Failed to validate proof: ${error.response?.data?.error || error.message}`);
+                        this.validationResult = null;
+                    }
+                },
+
+                async searchData() {
+                    // Clear any previous messages
+                    this.clearError();
+                    this.clearSuccess();
+                    this.loading = true;
+                    
+                    try {
+                        switch (this.activeTab) {
+                            case 'messages':
+                                await this.loadMessages();
+                                break;
+                            case 'proofs':
+                                await this.loadProofChain();
+                                break;
+                            case 'status':
+                                await this.loadBlockStatus();
+                                break;
+                            case 'validation':
+                                await this.validateProof();
+                                break;
+                        }
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                viewBlock(blockNumber) {
+                    this.searchFilters.blockNumber = blockNumber;
+                    // Clear thread and leaf to show all messages for the block
+                    this.searchFilters.threadID = '';
+                    this.searchFilters.leafIndex = '';
+                    this.activeTab = 'messages';
+                    this.loadMessages();
+                },
+
+                formatHash(hash) {
+                    if (!hash) return 'N/A';
+                    if (typeof hash === 'string') {
+                        return hash.length > 16 ? hash.substring(0, 16) + '...' : hash;
+                    }
+                    return hash.length > 16 ? hash.slice(0, 16).join('') + '...' : hash.join('');
+                },
+
+                getLayerName(layerIndex) {
+                    const names = ['Micro', 'Thread', 'Block'];
+                    return names[layerIndex] || `Layer ${layerIndex}`;
+                },
+
+                getStatusClass(status) {
+                    switch (status) {
+                        case 'finalized':
+                            return 'bg-green-100 text-green-800';
+                        case 'pending':
+                            return 'bg-yellow-100 text-yellow-800';
+                        case 'skipped':
+                            return 'bg-gray-100 text-gray-800';
+                        default:
+                            return 'bg-gray-100 text-gray-800';
+                    }
+                }
+            },
+
+            mounted() {
+                this.refreshData();
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
