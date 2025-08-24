@@ -169,8 +169,6 @@ export default function Dashboard() {
         <SearchFiltersComponent
           searchFilters={searchFilters}
           onFiltersChange={handleSearchFiltersChange}
-          onSearch={handleSearch}
-          isLoading={loading}
         />
 
         <div className="bg-white shadow rounded-lg">

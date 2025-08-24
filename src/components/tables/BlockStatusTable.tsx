@@ -15,7 +15,8 @@ const BlockStatusTable: React.FC<BlockStatusTableProps> = ({
   if (blockStatus.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
-        No block status found. Click "Load Status" to fetch data.
+        {`No block status found. Click "Load Status" to fetch data.`}
+        {/* No block status found. Click 'Load Status' to fetch data. */}
       </div>
     );
   }

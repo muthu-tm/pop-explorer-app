@@ -1,5 +1,5 @@
 'use client';  
-import React, { use } from 'react';
+import React from 'react';
 import { ProofChain } from '@/types';
 import { formatHash, getLayerName } from '@/utils/formatters';
 

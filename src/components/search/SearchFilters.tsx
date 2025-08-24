@@ -5,15 +5,11 @@ import { SearchFilters } from '@/types';
 interface SearchFiltersProps {
   searchFilters: SearchFilters;
   onFiltersChange: (filters: SearchFilters) => void;
-  onSearch: () => void;
-  isLoading: boolean;
 }
 
 const SearchFiltersComponent: React.FC<SearchFiltersProps> = ({
   searchFilters,
   onFiltersChange,
-  onSearch,
-  isLoading,
 }) => {
   const handleInputChange = (field: keyof SearchFilters, value: string) => {
     onFiltersChange({
