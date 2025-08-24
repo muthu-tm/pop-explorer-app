@@ -1,4 +1,4 @@
-# Proof of Proof Explorer Dashboard
+# Proof of Proof Explorer
 
 A modern Next.js dashboard application for exploring QDIP proofs, messages, and block status. This app has been converted from a Vue.js HTML application to a React-based Next.js application while maintaining the same design and functionality.
 
