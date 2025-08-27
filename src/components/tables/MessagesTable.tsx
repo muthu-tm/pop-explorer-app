@@ -54,7 +54,7 @@ const MessagesTable: React.FC<MessagesTableProps> = ({ messages }) => {
                 {msg.leaf_index}
               </td>
               <td className="px-6 py-4 text-sm text-gray-900 max-w-xs">
-                <span title={msg.original}>{truncateText(msg.original, 50)}</span>
+                <span title={msg.original}>{truncateText(msg.original, 16)}</span>
               </td>
               <td className="px-6 py-4 text-sm text-gray-500 font-mono">
                 <span title={msg.hash}>{formatHash(msg.hash)}</span>
