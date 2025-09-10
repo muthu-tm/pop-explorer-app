@@ -1,12 +1,14 @@
 'use client';
 import React from 'react';
+import { useBlockNumber } from '@/hooks/useBlockNumber';
 
 interface HeaderProps {
-  onRefresh: () => void;
+  onRefresh?: () => void;
   isLoading?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({ onRefresh, isLoading = false }) => {
+  const { blockNumber, isLoading: blockLoading } = useBlockNumber();
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -18,13 +20,21 @@ const Header: React.FC<HeaderProps> = ({ onRefresh, isLoading = false }) => {
             </span>
           </div>
           <div className="flex items-center space-x-4">
-            <button 
-              onClick={onRefresh} 
-              disabled={isLoading}
-              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              {isLoading ? 'Refreshing...' : 'Refresh Data'}
-            </button>
+            <div className="flex items-center space-x-2">
+              <span className="text-3xl font-bold text-gray-900">Block: </span>
+              <span className="text-3xl font-bold text-gray-900">
+                {blockLoading ? '...' : blockNumber.block_number}
+              </span>
+              {/* {blockNumber.status && (
+                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                  blockNumber.status === 'finalized' 
+                    ? 'bg-green-100 text-green-800' 
+                    : 'bg-yellow-100 text-yellow-800'
+                }`}>
+                  {blockNumber.status}
+                </span>
+              )} */}
+            </div>
           </div>
         </div>
       </div>

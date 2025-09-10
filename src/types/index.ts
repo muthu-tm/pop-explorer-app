@@ -54,3 +54,9 @@ export interface Message {
   }
   
   export type StatusType = 'finalized' | 'pending' | 'skipped' | string;
+
+export interface BlockNumber {
+  block_number: number;
+  status: string;
+  message_count: number;
+}

@@ -156,7 +156,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header onRefresh={handleRefreshData} isLoading={loading} />
+      <Header />
       
       <AlertSystem
         errorAlert={errorAlert}

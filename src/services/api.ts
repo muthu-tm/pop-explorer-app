@@ -1,6 +1,6 @@
 'use client';
 import axios from 'axios';
-import { Message, ProofChain, BlockStatus, ValidationResult, SearchFilters } from '@/types';
+import { Message, ProofChain, BlockStatus, ValidationResult, SearchFilters, BlockNumber } from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || 'http://localhost:8000';
 
@@ -62,6 +62,11 @@ export class ApiService {
     };
 
     const response = await ApiClient.get('/validate', { params });
+    return response.data;
+  }
+
+  static async getBlockNumber(): Promise<BlockNumber> {
+    const response = await ApiClient.get('/block-number');
     return response.data;
   }
 }
