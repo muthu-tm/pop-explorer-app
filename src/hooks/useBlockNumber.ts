@@ -31,6 +31,13 @@ export const useBlockNumber = () => {
     // Initial fetch
     fetchBlockNumber();
 
+    // Check if auto-refresh is enabled
+    const isRefreshEnabled = process.env.ENABLE_BLOCK_REFRESH === 'false';
+    
+    if (!isRefreshEnabled) {
+      return; // Don't set up auto-refresh if disabled
+    }
+
     // Get refresh interval from environment variable
     const refreshInterval = parseInt(process.env.BLOCK_CYCLE || '30') * 1000;
 
@@ -46,6 +53,7 @@ export const useBlockNumber = () => {
     blockNumber,
     isLoading,
     error,
-    refresh: fetchBlockNumber
+    refresh: fetchBlockNumber,
+    isAutoRefreshEnabled: process.env.ENABLE_BLOCK_REFRESH === 'false'
   };
 };
