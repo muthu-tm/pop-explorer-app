@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Footer from "@/components/layout/Footer";
+import ErrorBoundary from "@/components/error/ErrorBoundary";
+import LayoutWrapper from "@/components/layout/LayoutWrapper";
+import { BlockProvider } from "@/contexts/BlockContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +17,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Proof of Proof Explorer Dashboard",
-  description: "A dashboard for exploring POP proofs, messages, and block status",
+  title: "QProof Explorer - Verifiable Bitcoin Provenance",
+  description: "Track QProof provenance for Bitcoin transactions. View UTXOs, keys, and blocks with complete inclusion proofs and verification.",
+  keywords: ['QProof', 'Bitcoin', 'Blockchain', 'Explorer', 'Quantum-Resistant'],
+  authors: [{ name: 'QProof Team' }],
+  viewport: 'width=device-width, initial-scale=1',
+  robots: 'index, follow',
+  openGraph: {
+    title: 'QProof Explorer',
+    description: 'Verifiable Bitcoin Provenance, Made Simple',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({
@@ -25,9 +38,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        {children}
+        <ErrorBoundary>
+          <BlockProvider>
+            <LayoutWrapper>
+              {children}
+            </LayoutWrapper>
+            <Footer />
+          </BlockProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

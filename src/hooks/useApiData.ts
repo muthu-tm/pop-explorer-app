@@ -39,12 +39,14 @@ export const useApiData = () => {
   }, []);
 
   const loadProofChain = useCallback(async (
-    filters: SearchFilters,
+    block: string,
+    thread: string,
+    leaf: string,
     onSuccess?: (message: string) => void,
     onError?: (error: string) => void
   ) => {
     try {
-      const data = await ApiService.getProofChain(filters);
+      const data = await ApiService.getProofchain(block, thread, leaf);
       setProofChain(data);
       onSuccess?.('Proof chain loaded successfully');
     } catch (error: any) {
@@ -75,12 +77,14 @@ export const useApiData = () => {
   }, []);
 
   const validateProof = useCallback(async (
-    filters: SearchFilters,
+    block: string,
+    thread: string,
+    leaf: string,
     onSuccess?: (message: string) => void,
     onError?: (error: string) => void
   ) => {
     try {
-      const data = await ApiService.validateProof(filters);
+      const data = await ApiService.validateProof(block, thread, leaf);
       setValidationResult(data);
       onSuccess?.('Proof validation completed successfully');
     } catch (error: any) {
@@ -104,13 +108,33 @@ export const useApiData = () => {
           await loadMessages(filters, onSuccess, onError);
           break;
         case 'proofs':
-          await loadProofChain(filters, onSuccess, onError);
+          if (filters.blockNumber && filters.threadID && filters.leafIndex) {
+            await loadProofChain(
+              filters.blockNumber.toString(),
+              filters.threadID,
+              filters.leafIndex,
+              onSuccess,
+              onError
+            );
+          } else {
+            onError?.('Block number, thread ID, and leaf index are required for proof chain');
+          }
           break;
         case 'status':
           await loadBlockStatus(onSuccess, onError);
           break;
         case 'validation':
-          await validateProof(filters, onSuccess, onError);
+          if (filters.blockNumber && filters.threadID && filters.leafIndex) {
+            await validateProof(
+              filters.blockNumber.toString(),
+              filters.threadID,
+              filters.leafIndex,
+              onSuccess,
+              onError
+            );
+          } else {
+            onError?.('Block number, thread ID, and leaf index are required for validation');
+          }
           break;
       }
     } finally {
