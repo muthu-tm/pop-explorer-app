@@ -192,7 +192,7 @@ export default function KeyDetailPage() {
               <div>
                 <label className="text-sm font-medium text-gray-600">Next Key</label>
                 <div className="mt-1 font-mono text-sm">
-                  {key.next_key}
+                  {key.next_key.slice(0, 25)}...
                 </div>
               </div>
 

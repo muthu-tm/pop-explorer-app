@@ -167,12 +167,12 @@ export default function UTXODetailPage() {
 
               <div>
                 <label className="text-sm font-medium text-gray-600">QPAddress Hash</label>
-                <div className="mt-1 font-mono text-sm">{utxo.qpaddress_hash}</div>
+                <div className="mt-1 font-mono text-sm">{utxo.qpaddress_hash.slice(0, 25)}...</div>
               </div>
 
               <div>
                 <label className="text-sm font-medium text-gray-600">Next Key</label>
-                <div className="mt-1 font-mono text-sm">{utxo.next_key}</div>
+                <div className="mt-1 font-mono text-sm">{utxo.next_key.slice(0, 25)}...</div>
               </div>
             </div>
 
