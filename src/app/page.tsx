@@ -208,7 +208,6 @@ export default function HomePage() {
           onViewUTXO={handleViewUTXO}
           onViewKey={handleViewKey}
           onViewBlock={handleViewBlock}
-          onViewProof={handleViewProof}
         />
 
         <ProofModal

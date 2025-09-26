@@ -11,7 +11,6 @@ interface LiveInclusionsTableProps {
   onViewUTXO: (utxoId: string) => void;
   onViewKey: (pubkey: string) => void;
   onViewBlock: (blockNumber: number) => void;
-  onViewProof: (inclusion: Inclusion) => void;
 }
 
 export default function LiveInclusionsTable({
@@ -21,8 +20,7 @@ export default function LiveInclusionsTable({
   estimatedFinalization,
   onViewUTXO,
   onViewKey,
-  onViewBlock,
-  onViewProof
+  onViewBlock
 }: LiveInclusionsTableProps) {
   const [sortBy, setSortBy] = useState<'type' | 'blockNumber' | 'status'>('blockNumber');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -160,13 +158,12 @@ export default function LiveInclusionsTable({
                   )}
                 </div>
               </th>
-              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {sortedInclusions.length === 0 ? (
               <tr>
-                <td colSpan={5} className="text-center py-8 text-gray-500">
+                <td colSpan={4} className="text-center py-8 text-gray-500">
                   No inclusions yet. Waiting for new data...
                 </td>
               </tr>
@@ -201,28 +198,6 @@ export default function LiveInclusionsTable({
                     <span className={getStatusBadge(inclusion.status || 'pending')}>
                       {inclusion.status || 'pending'}
                     </span>
-                  </td>
-                  <td>
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => onViewProof(inclusion)}
-                        className="text-gray-400 hover:text-[#00CA65] transition-colors"
-                        title="View proof"
-                      >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                      </button>
-                      {inclusion.status === 'finalized' && (
-                        <button
-                          onClick={() => {/* TODO: View proofchain */}}
-                          className="text-[#00CA65] hover:text-[#00A855] text-sm font-medium"
-                        >
-                          View Proofchain
-                        </button>
-                      )}
-                    </div>
                   </td>
                 </tr>
               ))
