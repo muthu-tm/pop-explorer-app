@@ -145,8 +145,8 @@ export default function KeyDetailPage() {
     <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Key: {key.address.slice(0, 20)}...
+          <h1 className="text-xl font-bold text-gray-900 mb-2">
+            Key: {key.address}
           </h1>
           <p className="text-gray-600">
             Public key registration details and associated UTXOs
@@ -191,8 +191,13 @@ export default function KeyDetailPage() {
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium text-gray-600">Next Key</label>
-                <div className="mt-1 font-mono text-sm">
-                  {key.next_key.slice(0, 25)}...
+                <div className="mt-1">
+                  <button
+                    onClick={() => router.push(`/key/${key.next_key}`)}
+                    className="qproof-link font-mono text-sm underline hover:text-[#00A855]"
+                  >
+                    {key.next_key.slice(0, 25)}...
+                  </button>
                 </div>
               </div>
 

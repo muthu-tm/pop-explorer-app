@@ -13,6 +13,7 @@ interface HeaderProps {
 export default function Header({ currentBlock, tipBlock }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchError, setSearchError] = useState<string | null>(null);
   const router = useRouter();
   const { blockNumber, isLoading: blockLoading } = useBlockNumber();
 
@@ -20,9 +21,13 @@ export default function Header({ currentBlock, tipBlock }: HeaderProps) {
     e.preventDefault();
     if (searchQuery.trim()) {
       try {
+        setSearchError(null);
         // Use universal search API
         const { ApiService } = await import('@/services/api');
         const result = await ApiService.search(searchQuery.trim());
+        
+        // Clear search query on successful result
+        setSearchQuery('');
         
         // Navigate based on search result type
         if (result.type === 'utxo') {
@@ -50,13 +55,18 @@ export default function Header({ currentBlock, tipBlock }: HeaderProps) {
         }
       } catch (error) {
         console.error('Search error:', error);
+        setSearchError('No results found. Please try a different search term.');
+        
         // Fallback to direct navigation
         if (searchQuery.startsWith('utxo:')) {
           router.push(`/utxo/${searchQuery}`);
+          setSearchQuery('');
         } else if (searchQuery.startsWith('wots:')) {
           router.push(`/key/${searchQuery}`);
+          setSearchQuery('');
         } else if (/^\d+$/.test(searchQuery)) {
           router.push(`/block/${searchQuery}`);
+          setSearchQuery('');
         }
       }
     }
@@ -86,7 +96,10 @@ export default function Header({ currentBlock, tipBlock }: HeaderProps) {
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  if (searchError) setSearchError(null);
+                }}
                 placeholder="Search by UTXO ID, Pubkey, or Block Number..."
                 className="w-full px-4 py-2 pl-10 pr-4 text-gray-900 placeholder-gray-500 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00CA65] focus:border-transparent"
               />
@@ -96,6 +109,16 @@ export default function Header({ currentBlock, tipBlock }: HeaderProps) {
                 </svg>
               </div>
             </form>
+            {searchError && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-red-50 border border-red-200 rounded-lg p-2 z-10">
+                <div className="flex items-center">
+                  <svg className="h-4 w-4 text-red-400 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm text-red-700">{searchError}</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Current Block Banner */}

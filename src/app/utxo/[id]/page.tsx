@@ -146,7 +146,7 @@ export default function UTXODetailPage() {
     <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex-1">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-xl font-bold text-gray-900 mb-2">
             UTXO: {utxo.utxo_id}
           </h1>
           <p className="text-gray-600">
@@ -162,17 +162,31 @@ export default function UTXODetailPage() {
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium text-gray-600">UTXO ID</label>
-                <div className="mt-1 font-mono text-sm">{utxo.utxo_id}</div>
+                <div className="mt-1 font-mono text-sm">{utxo.utxo_id.slice(0, 25)}...</div>
               </div>
 
               <div>
                 <label className="text-sm font-medium text-gray-600">QPAddress Hash</label>
-                <div className="mt-1 font-mono text-sm">{utxo.qpaddress_hash.slice(0, 25)}...</div>
+                <div className="mt-1">
+                  <button
+                    onClick={() => router.push(`/key/${utxo.qpaddress_hash}`)}
+                    className="qproof-link font-mono text-sm underline hover:text-[#00A855]"
+                  >
+                    {utxo.qpaddress_hash.slice(0, 25)}...
+                  </button>
+                </div>
               </div>
 
               <div>
                 <label className="text-sm font-medium text-gray-600">Next Key</label>
-                <div className="mt-1 font-mono text-sm">{utxo.next_key.slice(0, 25)}...</div>
+                <div className="mt-1">
+                  <button
+                    onClick={() => router.push(`/key/${utxo.next_key}`)}
+                    className="qproof-link font-mono text-sm underline hover:text-[#00A855]"
+                  >
+                    {utxo.next_key.slice(0, 25)}...
+                  </button>
+                </div>
               </div>
             </div>
 
