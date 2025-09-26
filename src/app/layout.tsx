@@ -23,6 +23,11 @@ export const metadata: Metadata = {
   authors: [{ name: 'QProof Team' }],
   viewport: 'width=device-width, initial-scale=1',
   robots: 'index, follow',
+  icons: {
+    icon: '/qproof_logo.png',
+    shortcut: '/qproof_logo.png',
+    apple: '/qproof_logo.png',
+  },
   openGraph: {
     title: 'QProof Explorer',
     description: 'Verifiable Bitcoin Provenance, Made Simple',
