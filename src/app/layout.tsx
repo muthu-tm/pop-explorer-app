@@ -32,21 +32,26 @@ export const metadata: Metadata = {
     title: 'QProof Explorer',
     description: '⚡ QProof Explorer - Verifiable Bitcoin Provenance, Made Simple',
     type: 'website',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://pop-explorer.vercel.app',
     images: [
       {
-        url: '/qproof_logo.png',
+        url: 'https://pop-explorer.vercel.app/qproof_logo.png',
         width: 1200,
         height: 630,
         alt: 'QProof Explorer',
+        type: 'image/png',
       },
     ],
     siteName: 'QProof Explorer',
+    locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'QProof Explorer',
     description: '⚡ QProof Explorer - Verifiable Bitcoin Provenance, Made Simple',
-    images: ['/qproof_logo.png'],
+    images: ['https://pop-explorer.vercel.app/qproof_logo.png'],
+    creator: '@QProof',
+    site: '@QProof',
   },
 };
 
