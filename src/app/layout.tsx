@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "QProof Explorer - Verifiable Bitcoin Provenance",
-  description: "Track QProof provenance for Bitcoin transactions. View UTXOs, keys, and blocks with complete inclusion proofs and verification.",
+  description: "⚡ QProof Explorer - Verifiable Bitcoin Provenance, Made Simple",
   keywords: ['QProof', 'Bitcoin', 'Blockchain', 'Explorer', 'Quantum-Resistant'],
   authors: [{ name: 'QProof Team' }],
   viewport: 'width=device-width, initial-scale=1',
@@ -30,8 +30,23 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'QProof Explorer',
-    description: 'Verifiable Bitcoin Provenance, Made Simple',
+    description: '⚡ QProof Explorer - Verifiable Bitcoin Provenance, Made Simple',
     type: 'website',
+    images: [
+      {
+        url: '/qproof_logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'QProof Explorer',
+      },
+    ],
+    siteName: 'QProof Explorer',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'QProof Explorer',
+    description: '⚡ QProof Explorer - Verifiable Bitcoin Provenance, Made Simple',
+    images: ['/qproof_logo.png'],
   },
 };
 
