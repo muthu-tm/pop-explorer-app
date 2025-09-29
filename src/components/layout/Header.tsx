@@ -53,9 +53,15 @@ export default function Header({ currentBlock, tipBlock }: HeaderProps) {
             }
           }
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Search error:', error);
-        setSearchError('No results found. Please try a different search term.');
+        
+        // Check if it's a 404 error from the search API
+        if (error.response?.status === 404) {
+          setSearchError('No results found. Please try a different search term.');
+        } else {
+          setSearchError('Search failed. Please try again.');
+        }
         
         // Fallback to direct navigation
         if (searchQuery.startsWith('utxo:')) {

@@ -166,13 +166,13 @@ export default function UTXODetailPage() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-600">QPAddress Hash</label>
+                <label className="text-sm font-medium text-gray-600">Initial Key</label>
                 <div className="mt-1">
                   <button
-                    onClick={() => router.push(`/key/${utxo.qpaddress_hash}`)}
+                    onClick={() => router.push(`/key/${utxo.initial_key}`)}
                     className="qproof-link font-mono text-sm underline hover:text-[#00A855]"
                   >
-                    {utxo.qpaddress_hash.slice(0, 25)}...
+                    {utxo.initial_key.slice(0, 25)}...
                   </button>
                 </div>
               </div>

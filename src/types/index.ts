@@ -13,7 +13,7 @@ export interface Tab {
 // Core entities
 export interface UTXO {
   utxo_id: string;
-  qpaddress_hash: string;
+  initial_key: string;
   signature: string;
   message: string;
   block_number: number;
@@ -26,6 +26,7 @@ export interface Key {
   address: string;
   signature: string;
   block_number: number;
+  initial_key: string;
   next_key: string;
   created_at: string;
   updated_at: string;

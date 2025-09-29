@@ -87,7 +87,7 @@ export default function KeyDetailPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `key-${key.address.slice(0, 8)}-${Date.now()}.json`;
+    a.download = `key-${key.initial_key.slice(0, 8)}-${Date.now()}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -146,7 +146,7 @@ export default function KeyDetailPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-xl font-bold text-gray-900 mb-2">
-            Key: {key.address}
+            Key: {key.initial_key}
           </h1>
           <p className="text-gray-600">
             Public key registration details and associated UTXOs
@@ -334,7 +334,7 @@ export default function KeyDetailPage() {
           onClose={handleCloseProofModal}
           inclusion={{
             type: 'key',
-            id: key.address,
+            id: key.initial_key,
             block_number: key.block_number,
             created_at: key.created_at,
             status: key.status
