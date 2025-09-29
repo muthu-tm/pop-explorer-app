@@ -40,7 +40,7 @@ export default function KeyDetailPage() {
     try {
       // Get thread and leaf information for this key
       const proofInfo = await ApiService.getKeyProofInfo(key.address);
-      
+
       // Load microproof data using resolved thread and leaf
       const proof = await ApiService.getProof(
         proofInfo.block_number.toString(),
@@ -48,7 +48,7 @@ export default function KeyDetailPage() {
         proofInfo.leaf_index.toString()
       );
       setMicroProof(proof);
-      
+
       // If finalized, also load proofchain
       if (key.status === 'finalized') {
         const proofchain = await ApiService.getProofchain(
@@ -60,7 +60,7 @@ export default function KeyDetailPage() {
       } else {
         setProofChain(null);
       }
-      
+
       setIsProofModalOpen(true);
     } catch (error) {
       console.error('Error loading proof:', error);
@@ -76,13 +76,13 @@ export default function KeyDetailPage() {
 
   const handleDownloadJSON = () => {
     if (!key) return;
-    
+
     const data = {
       key,
       microProof,
       proofChain
     };
-    
+
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -143,97 +143,102 @@ export default function KeyDetailPage() {
 
   return (
     <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-xl font-bold text-gray-900 mb-2">
-            Key: {key.initial_key}
-          </h1>
-          <p className="text-gray-600">
-            Public key registration details and associated UTXOs
-          </p>
-        </div>
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-xl font-bold text-gray-900 mb-2">
+          Key: {key.initial_key}
+        </h1>
+        <p className="text-gray-600">
+          Public key registration details and associated UTXOs
+        </p>
+      </div>
 
-        {/* Summary Card */}
-        <div className="qproof-card mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Registration Summary</h2>
-          
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-gray-600">First Included in Block</label>
-                <div className="mt-1">
-                    <button
-                      onClick={() => router.push(`/block/${key.block_number}`)}
-                      className="qproof-link font-mono"
-                    >
-                      #{key.block_number.toLocaleString()}
-                    </button>
-                </div>
-              </div>
+      {/* Summary Card */}
+      <div className="qproof-card mb-8">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">Registration Summary</h2>
 
-              <div>
-                <label className="text-sm font-medium text-gray-600">Status</label>
-                <div className="mt-1">
-                  <span className={getStatusBadge(key.status)}>
-                    {key.status}
-                  </span>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-600">Created At</label>
-                <div className="mt-1 font-mono text-sm">
-                  {new Date(key.created_at).toLocaleString()}
-                </div>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-gray-600">First Included in Block</label>
+              <div className="mt-1">
+                <button
+                  onClick={() => router.push(`/block/${key.block_number}`)}
+                  className="qproof-link font-mono"
+                >
+                  #{key.block_number.toLocaleString()}
+                </button>
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-gray-600">Next Key</label>
-                <div className="mt-1">
+            <div>
+              <label className="text-sm font-medium text-gray-600">Status</label>
+              <div className="mt-1">
+                <span className={getStatusBadge(key.status)}>
+                  {key.status}
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-600">Created At</label>
+              <div className="mt-1 font-mono text-sm">
+                {new Date(key.created_at).toLocaleString()}
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-gray-600">Next Key</label>
+              <div className="mt-1">
+                {(key.next_key && key.next_key !== '') ? (
                   <button
                     onClick={() => router.push(`/key/${key.next_key}`)}
                     className="qproof-link font-mono text-sm underline hover:text-[#00A855]"
                   >
                     {key.next_key.slice(0, 25)}...
-                  </button>
-                </div>
+                  </button>) : (
+                  <span className="qproof-badge qproof-badge-pending">
+                    N/A
+                  </span>
+                )}
               </div>
+            </div>
 
-              <div>
-                <label className="text-sm font-medium text-gray-600">Associated UTXOs</label>
-                <div className="mt-1 text-lg font-semibold text-gray-900">
-                  {key.utxos?.length || 0}
-                </div>
+            <div>
+              <label className="text-sm font-medium text-gray-600">Associated UTXOs</label>
+              <div className="mt-1 text-lg font-semibold text-gray-900">
+                {key.utxos?.length || 0}
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* UTXOs Table */}
-        <div className="qproof-card mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Associated UTXOs</h2>
-          
-          {!key.utxos || key.utxos.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">No UTXOs associated with this key</p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="qproof-table">
-                <thead>
-                  <tr>
-                    <th>UTXO ID</th>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Since Block</th>
-                    <th>Status</th>
-                    <th>Claim Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {key.utxos && key.utxos.length > 0 ? (
-                    key.utxos.map((utxo) => (
+      {/* UTXOs Table */}
+      <div className="qproof-card mb-8">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">Associated UTXOs</h2>
+
+        {!key.utxos || key.utxos.length === 0 ? (
+          <p className="text-gray-500 text-center py-8">No UTXOs associated with this key</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="qproof-table">
+              <thead>
+                <tr>
+                  <th>UTXO ID</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Since Block</th>
+                  <th>Status</th>
+                  <th>Claim Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {key.utxos && key.utxos.length > 0 ? (
+                  key.utxos.map((utxo) => (
                     <tr key={utxo.utxo_id} className="hover:bg-gray-50">
                       <td>
                         <button
@@ -278,72 +283,72 @@ export default function KeyDetailPage() {
                         </button>
                       </td>
                     </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={6} className="text-center py-8 text-gray-500">
-                        No UTXOs associated with this key
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="text-center py-8 text-gray-500">
+                      No UTXOs associated with this key
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
 
-        {/* Actions */}
-        <div className="qproof-card">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Actions</h2>
-          
-          <div className="flex flex-wrap gap-4">
+      {/* Actions */}
+      <div className="qproof-card">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">Actions</h2>
+
+        <div className="flex flex-wrap gap-4">
+          <button
+            onClick={handleViewProof}
+            className="qproof-btn qproof-btn-primary"
+          >
+            Show Full Proof
+          </button>
+
+          <button
+            onClick={handleDownloadJSON}
+            className="qproof-btn qproof-btn-secondary"
+          >
+            Download JSON
+          </button>
+
+          <button
+            onClick={handleCopyLink}
+            className="qproof-btn qproof-btn-secondary"
+          >
+            Copy Link
+          </button>
+
+          {key.status === 'finalized' && (
             <button
               onClick={handleViewProof}
               className="qproof-btn qproof-btn-primary"
             >
-              Show Full Proof
+              View Proofchain
             </button>
-            
-            <button
-              onClick={handleDownloadJSON}
-              className="qproof-btn qproof-btn-secondary"
-            >
-              Download JSON
-            </button>
-            
-            <button
-              onClick={handleCopyLink}
-              className="qproof-btn qproof-btn-secondary"
-            >
-              Copy Link
-            </button>
-
-            {key.status === 'finalized' && (
-              <button
-                onClick={handleViewProof}
-                className="qproof-btn qproof-btn-primary"
-              >
-                View Proofchain
-              </button>
-            )}
-          </div>
+          )}
         </div>
+      </div>
 
-        <ProofModal
-          isOpen={isProofModalOpen}
-          onClose={handleCloseProofModal}
-          inclusion={{
-            type: 'key',
-            id: key.initial_key,
-            block_number: key.block_number,
-            created_at: key.created_at,
-            status: key.status
-          }}
-          microProof={microProof}
-          proofChain={proofChain}
-          onDownloadJSON={handleDownloadJSON}
-          onCopyLink={handleCopyLink}
-        />
+      <ProofModal
+        isOpen={isProofModalOpen}
+        onClose={handleCloseProofModal}
+        inclusion={{
+          type: 'key',
+          id: key.initial_key,
+          block_number: key.block_number,
+          created_at: key.created_at,
+          status: key.status
+        }}
+        microProof={microProof}
+        proofChain={proofChain}
+        onDownloadJSON={handleDownloadJSON}
+        onCopyLink={handleCopyLink}
+      />
     </div>
   );
 }
