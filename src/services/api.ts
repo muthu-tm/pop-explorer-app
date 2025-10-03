@@ -17,7 +17,9 @@ import {
   ProofInfo,
   SystemStats,
   BlockStats,
-  UTXOStats
+  UTXOStats,
+  Vow,
+  Input
 } from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || 'http://localhost:8000';
@@ -90,8 +92,8 @@ export class ApiService {
   // UTXO management
   static async getUTXO(utxoId: string): Promise<{
     utxo: UTXO;
-    vows: any[];
-    inputs: string[];
+    vows: Vow[] | null;
+    inputs: Input[] | null;
   }> {
     const response = await ApiClient.get(`/utxo/${utxoId}`);
     return response.data;

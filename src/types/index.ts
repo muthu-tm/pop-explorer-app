@@ -197,16 +197,24 @@ export interface UTXOStats {
   utxos_with_inputs: number;
 }
 
+// Vow and Input types
+export interface Vow {
+  vow_type: 'send' | 'receive';
+  receiver_pubkey?: string;
+  value?: number;
+  initial_block?: number;
+}
+
+export interface Input {
+  utxo_id: string;
+  value: number;
+}
+
 // API Response wrappers
 export interface UTXOResponse {
   utxo: UTXO;
-  vows: Array<{
-    vow_type: 'send' | 'receive';
-    receiver_pubkey?: string;
-    value?: number;
-    initial_block?: number;
-  }>;
-  inputs: string[];
+  vows: Vow[] | null;
+  inputs: Input[] | null;
 }
 
 export interface KeyResponse {
