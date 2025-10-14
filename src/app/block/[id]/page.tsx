@@ -121,7 +121,7 @@ export default function BlockDetailPage() {
 
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex-1">
+      <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00CA65] mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading block details...</p>
@@ -132,7 +132,7 @@ export default function BlockDetailPage() {
 
   if (!block) {
     return (
-      <div className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex-1">
+      <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Block Not Found</h1>
           <p className="text-gray-600 mb-6">The requested block could not be found.</p>
@@ -148,74 +148,84 @@ export default function BlockDetailPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex-1">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Block #{block.block_number.toLocaleString()}
-          </h1>
-          <p className="text-gray-600">
-            Block details and statistics
-          </p>
+    <div className="flex-1 flex flex-col min-h-0">
+      {/* Full-width header */}
+      <div className="border-gray-200">
+        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <div className="mb-6">
+            <h1 className="text-2xl sm:text-xl font-bold text-gray-900 mb-2">
+              Block: #{block.block_number.toLocaleString()}
+            </h1>
+            <p className="text-gray-600">
+              Block details and statistics
+            </p>
+          </div>
         </div>
+      </div>
 
-        {/* Summary Card */}
-        <div className="qproof-card mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Block Summary</h2>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div>
-              <label className="text-sm font-medium text-gray-600">Status</label>
-              <div className="mt-1">
-                <span className={`qproof-badge ${
-                  block.status === 'finalized' ? 'qproof-badge-finalized' : 
-                  block.status === 'pending' ? 'qproof-badge-pending' : 'qproof-badge-reorged'
-                }`}>
-                  {block.status}
-                </span>
+      <div className="flex-1 min-h-0">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {/* Summary Card */}
+          <div className="qproof-card mb-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">Block Summary</h2>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div>
+                <label className="text-sm font-medium text-gray-600">Status</label>
+                <div className="mt-1">
+                  <span className={`qproof-badge ${
+                    block.status === 'finalized' ? 'qproof-badge-finalized' : 
+                    block.status === 'pending' ? 'qproof-badge-pending' : 'qproof-badge-reorged'
+                  }`}>
+                    {block.status}
+                  </span>
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label className="text-sm font-medium text-gray-600">UTXO Count</label>
-              <div className="mt-1 text-2xl font-bold text-[#00CA65]">
-                {block.utxo_count}
+              <div>
+                <label className="text-sm font-medium text-gray-600">UTXO Count</label>
+                <div className="mt-1 text-2xl font-bold text-[#00CA65]">
+                  {block.utxo_count}
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label className="text-sm font-medium text-gray-600">Key Count</label>
-              <div className="mt-1 text-2xl font-bold text-[#00CA65]">
-                {block.key_count}
+              <div>
+                <label className="text-sm font-medium text-gray-600">Key Count</label>
+                <div className="mt-1 text-2xl font-bold text-[#00CA65]">
+                  {block.key_count}
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label className="text-sm font-medium text-gray-600">Message Count</label>
-              <div className="mt-1 text-2xl font-bold text-[#00CA65]">
-                {block.message_count}
+              <div>
+                <label className="text-sm font-medium text-gray-600">Message Count</label>
+                <div className="mt-1 text-2xl font-bold text-[#00CA65]">
+                  {block.message_count}
+                </div>
               </div>
             </div>
           </div>
+
+          {/* Block Inclusions */}
+          <div className="h-full">
+            <BlockInclusionsTable
+              inclusions={inclusions}
+              onViewUTXO={handleViewUTXO}
+              onViewKey={handleViewKey}
+              onViewProof={handleViewProof}
+            />
+          </div>
         </div>
+      </div>
 
-        {/* Block Inclusions */}
-        <BlockInclusionsTable
-          inclusions={inclusions}
-          onViewUTXO={handleViewUTXO}
-          onViewKey={handleViewKey}
-          onViewProof={handleViewProof}
-        />
-
-        <ProofModal
-          isOpen={isProofModalOpen}
-          onClose={handleCloseProofModal}
-          inclusion={selectedInclusion || undefined}
-          microProof={microProof || undefined}
-          proofChain={proofChain || undefined}
-          onDownloadJSON={handleDownloadJSON}
-          onCopyLink={handleCopyLink}
-        />
+      <ProofModal
+        isOpen={isProofModalOpen}
+        onClose={handleCloseProofModal}
+        inclusion={selectedInclusion || undefined}
+        microProof={microProof || undefined}
+        proofChain={proofChain || undefined}
+        onDownloadJSON={handleDownloadJSON}
+        onCopyLink={handleCopyLink}
+      />
     </div>
   );
 }

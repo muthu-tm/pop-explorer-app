@@ -124,7 +124,7 @@ export default function UTXODetailPage() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex-1">
+      <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00CA65] mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading UTXO details...</p>
@@ -135,7 +135,7 @@ export default function UTXODetailPage() {
 
   if (!utxo) {
     return (
-      <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex-1">
+      <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">UTXO Not Found</h1>
           <p className="text-gray-600 mb-6">The requested UTXO could not be found.</p>
@@ -151,16 +151,24 @@ export default function UTXODetailPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex-1">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-xl font-bold text-gray-900 mb-2">
-            UTXO: {utxo.utxo_id}
-          </h1>
-          <p className="text-gray-600">
-            Transaction output details and provenance information
-          </p>
+    <div className="flex-1 flex flex-col min-h-0">
+      {/* Full-width header */}
+      <div className="border-gray-200">
+        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <div className="mb-6">
+            <h1 className="text-2xl sm:text-xl font-bold text-gray-900 mb-2">
+              <span className="hidden sm:inline">UTXO: {utxo.utxo_id}</span>
+              <span className="sm:hidden">UTXO: {utxo.utxo_id.slice(0, 20)}...</span>
+            </h1>
+            <p className="text-gray-600">
+              Transaction output details and provenance information
+            </p>
+          </div>
         </div>
+      </div>
+
+      <div className="flex-1 min-h-0">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         {/* Details Card */}
         <div className="qproof-card mb-8">
@@ -369,14 +377,14 @@ export default function UTXODetailPage() {
               Copy Link
             </button>
 
-            {utxo.status === 'finalized' && (
+            {/* {utxo.status === 'finalized' && (
               <button
                 onClick={handleViewProof}
                 className="qproof-btn qproof-btn-primary"
               >
                 View Proofchain
               </button>
-            )}
+            )} */}
           </div>
         </div>
 
@@ -395,6 +403,8 @@ export default function UTXODetailPage() {
           onDownloadJSON={handleDownloadJSON}
           onCopyLink={handleCopyLink}
         />
+        </div>
+      </div>
     </div>
   );
 }

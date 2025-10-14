@@ -115,7 +115,7 @@ export default function KeyDetailPage() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex-1">
+      <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00CA65] mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading key details...</p>
@@ -126,7 +126,7 @@ export default function KeyDetailPage() {
 
   if (!key) {
     return (
-      <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex-1">
+      <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Key Not Found</h1>
           <p className="text-gray-600 mb-6">The requested key could not be found.</p>
@@ -142,16 +142,24 @@ export default function KeyDetailPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-xl font-bold text-gray-900 mb-2">
-          Key: {key.initial_key}
-        </h1>
-        <p className="text-gray-600">
-          Public key registration details and associated UTXOs
-        </p>
+    <div className="flex-1 flex flex-col min-h-0">
+      {/* Full-width header */}
+      <div className="border-gray-200">
+        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <div className="mb-6">
+            <h1 className="text-2xl sm:text-xl font-bold text-gray-900 mb-2">
+              <span className="hidden sm:inline">Key: {key.initial_key}</span>
+              <span className="sm:hidden">Key: {key.initial_key.slice(0, 20)}...</span>
+            </h1>
+            <p className="text-gray-600">
+              Public key registration details and associated UTXOs
+            </p>
+          </div>
+        </div>
       </div>
+
+      <div className="flex-1 min-h-0">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
       {/* Summary Card */}
       <div className="qproof-card mb-8">
@@ -323,14 +331,14 @@ export default function KeyDetailPage() {
             Copy Link
           </button>
 
-          {key.status === 'finalized' && (
+          {/* {key.status === 'finalized' && (
             <button
               onClick={handleViewProof}
               className="qproof-btn qproof-btn-primary"
             >
               View Proofchain
             </button>
-          )}
+          )} */}
         </div>
       </div>
 
@@ -349,6 +357,8 @@ export default function KeyDetailPage() {
         onDownloadJSON={handleDownloadJSON}
         onCopyLink={handleCopyLink}
       />
+        </div>
+      </div>
     </div>
   );
 }
