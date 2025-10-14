@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Inclusion, MicroProof, ProofChain } from '@/types';
 import { ApiService } from '@/services/api';
 import { useBlockContext } from '@/contexts/BlockContext';
+import { useToast } from '@/contexts/ToastContext';
 
 // Layout Components
 import LiveInclusionsTable from '@/components/tables/LiveInclusionsTable';
@@ -18,7 +19,7 @@ export default function HomePage() {
   const [currentBlock, setCurrentBlockLocal] = useState<number>(0);
   const [inclusionCount, setInclusionCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
   
   const [selectedInclusion, setSelectedInclusion] = useState<Inclusion | null>(null);
   const [isProofModalOpen, setIsProofModalOpen] = useState(false);
@@ -30,7 +31,6 @@ export default function HomePage() {
     const loadData = async () => {
       try {
         setLoading(true);
-        setError(null);
         
         // Load current block status
         const blockStatus = await ApiService.getCurrentBlockStatus();
@@ -45,7 +45,7 @@ export default function HomePage() {
         
       } catch (err) {
         console.error('Error loading data:', err);
-        setError('Failed to load live data. Please try again.');
+        // setError('Failed to load live data. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -122,7 +122,7 @@ export default function HomePage() {
       setIsProofModalOpen(true);
     } catch (err) {
       console.error('Error loading proof:', err);
-      setError('Failed to load proof data. Please try again.');
+      // setError('Failed to load proof data. Please try again.');
     }
   };
 
@@ -156,13 +156,36 @@ export default function HomePage() {
     navigator.clipboard.writeText(url);
   };
 
+  const handleRefresh = async () => {
+    try {
+      setLoading(true);
+      
+      // Load current block status
+      const blockStatus = await ApiService.getCurrentBlockStatus();
+      setCurrentBlockLocal(blockStatus.block_number);
+      setCurrentBlock(blockStatus.block_number);
+      setTipBlock(blockStatus.block_number + 3);
+      setInclusionCount(blockStatus.inclusion_count);
+      
+      // Load live inclusions
+      const liveData = await ApiService.getLiveInclusions();
+      setInclusions(liveData.inclusions);
+      
+    } catch (err) {
+      console.error('Error refreshing data:', err);
+      showToast('Failed to refresh data. Please try again.', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const estimatedFinalization = currentBlock && inclusions ? 
     `${Math.max(0, 6 - (inclusions.filter(i => i.status === 'pending').length))} minutes` : 
     undefined;
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 flex-1">
+      <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00CA65] mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading live data...</p>
@@ -172,53 +195,61 @@ export default function HomePage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 flex-1">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Live Block Inclusions
-          </h1>
-          <p className="text-gray-600">
-            Watch inclusions being added to the current block in real-time
-          </p>
-        </div>
-
-        {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">Error</h3>
-                <div className="mt-2 text-sm text-red-700">
-                  <p>{error}</p>
-                </div>
-              </div>
+    <div className="flex-1 flex flex-col">
+      {/* Full-width header */}
+      <div className="border-gray-200">
+        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Live Block Inclusions
+              </h1>
+              <p className="text-gray-600">
+                Watch inclusions being added to the current block in real-time
+              </p>
             </div>
+            <button
+              onClick={handleRefresh}
+              disabled={loading}
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-[#00CA65] hover:text-white hover:border-[#00CA65] focus:outline-none focus:ring-2 focus:ring-[#00CA65] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <svg 
+                className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              <span>Refresh</span>
+            </button>
           </div>
-        )}
+        </div>
+      </div>
 
-        <LiveInclusionsTable
-          inclusions={inclusions || []}
-          currentBlock={currentBlock}
-          inclusionCount={inclusionCount}
-          estimatedFinalization={estimatedFinalization}
-          onViewUTXO={handleViewUTXO}
-          onViewKey={handleViewKey}
-          onViewBlock={handleViewBlock}
-        />
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full max-w-7xl mx-auto px-6 lg:px-8">
+          <LiveInclusionsTable
+            inclusions={inclusions || []}
+            currentBlock={currentBlock}
+            inclusionCount={inclusionCount}
+            estimatedFinalization={estimatedFinalization}
+            onViewUTXO={handleViewUTXO}
+            onViewKey={handleViewKey}
+            onViewBlock={handleViewBlock}
+          />
+        </div>
+      </div>
 
-        <ProofModal
-          isOpen={isProofModalOpen}
-          onClose={handleCloseProofModal}
-          inclusion={selectedInclusion || undefined}
-          microProof={microProof || undefined}
-          proofChain={proofChain || undefined}
-          onDownloadJSON={handleDownloadJSON}
-          onCopyLink={handleCopyLink}
-        />
+      <ProofModal
+        isOpen={isProofModalOpen}
+        onClose={handleCloseProofModal}
+        inclusion={selectedInclusion || undefined}
+        microProof={microProof || undefined}
+        proofChain={proofChain || undefined}
+        onDownloadJSON={handleDownloadJSON}
+        onCopyLink={handleCopyLink}
+      />
     </div>
   );
 }

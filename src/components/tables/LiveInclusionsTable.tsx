@@ -92,30 +92,31 @@ export default function LiveInclusionsTable({
   };
 
   return (
-    <div className="qproof-card">
-      {/* Block Context Widget */}
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-        <div className="flex justify-between items-center">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900">
-              Current Block: #{currentBlock.toLocaleString()}
-            </h3>
-            <p className="text-sm text-gray-600">
-              {inclusionCount} inclusions so far
-            </p>
-          </div>
-          {estimatedFinalization && (
-            <div className="text-right">
-              <p className="text-sm text-gray-600">Estimated finalization</p>
-              <p className="text-sm font-medium text-gray-900">{estimatedFinalization}</p>
+    <div className="h-full flex flex-col">
+      <div className="qproof-card flex-1 flex flex-col">
+        {/* Block Context Widget */}
+        <div className="mb-6 p-4 bg-gray-50 rounded-lg flex-shrink-0">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Current Block: #{currentBlock.toLocaleString()}
+              </h3>
+              <p className="text-sm text-gray-600">
+                {inclusionCount} inclusions so far
+              </p>
             </div>
-          )}
+            {estimatedFinalization && (
+              <div className="text-right">
+                <p className="text-sm text-gray-600">Estimated finalization</p>
+                <p className="text-sm font-medium text-gray-900">{estimatedFinalization}</p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="qproof-table">
+        {/* Table */}
+        <div className="flex-1 overflow-auto">
+          <table className="qproof-table">
           <thead>
             <tr>
               <th 
@@ -203,7 +204,8 @@ export default function LiveInclusionsTable({
               ))
             )}
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
     </div>
   );

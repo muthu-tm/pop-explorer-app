@@ -38,7 +38,7 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="flex-1 bg-gray-50 flex">
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
       
@@ -71,7 +71,7 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
         <Header currentBlock={currentBlock} tipBlock={tipBlock} />
 
         {/* Page content */}
-        <main className="flex-1">
+        <main className="flex-1 flex flex-col">
           {children}
         </main>
       </div>

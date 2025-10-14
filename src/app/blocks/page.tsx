@@ -10,6 +10,7 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 export default function BlocksPage() {
   const [blockStatus, setBlockStatus] = useState<BlockStatus[]>([]);
+  const [allBlockStatus, setAllBlockStatus] = useState<BlockStatus[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,9 +34,10 @@ export default function BlocksPage() {
       const endIndex = startIndex + itemsPerPage;
       const paginatedBlocks = allBlocks.slice(startIndex, endIndex);
       
+      setAllBlockStatus(allBlocks);
       setBlockStatus(paginatedBlocks);
-      setTotalBlocks(blockInfo.block_number);
-      setTotalPages(Math.ceil(blockInfo.block_number / itemsPerPage));
+      setTotalBlocks(blockInfo.block_number + 1);
+      setTotalPages(Math.ceil((blockInfo.block_number + 1) / itemsPerPage));
       setCurrentPage(page);
       
     } catch (err: any) {
@@ -65,16 +67,17 @@ export default function BlocksPage() {
 
   if (loading && blockStatus.length === 0) {
     return (
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center justify-center">
         <LoadingSpinner />
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex-1">
-        {/* Header */}
-        <div className="mb-8">
+    <div className="flex-1 flex flex-col">
+      {/* Full-width header */}
+      <div className="border-gray-200">
+        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Blocks</h1>
@@ -85,7 +88,7 @@ export default function BlocksPage() {
             <button
               onClick={handleRefresh}
               disabled={loading}
-              className="qproof-btn qproof-btn-secondary flex items-center space-x-2"
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-[#00CA65] hover:text-white hover:border-[#00CA65] focus:outline-none focus:ring-2 focus:ring-[#00CA65] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <svg 
                 className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} 
@@ -99,106 +102,115 @@ export default function BlocksPage() {
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="qproof-card">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-blue-100 rounded-md flex items-center justify-center">
-                  <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
+      {/* Stats section */}
+      <div className="bg-gray-50 py-6">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="qproof-card">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-blue-100 rounded-md flex items-center justify-center">
+                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                  </div>
                 </div>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Total Blocks</p>
-                <p className="text-2xl font-semibold text-gray-900">{totalBlocks.toLocaleString()}</p>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Total Blocks</p>
+                  <p className="text-2xl font-semibold text-gray-900">{totalBlocks.toLocaleString()}</p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="qproof-card">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-green-100 rounded-md flex items-center justify-center">
-                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+            <div className="qproof-card">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-green-100 rounded-md flex items-center justify-center">
+                    <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
                 </div>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Finalized</p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {blockStatus.filter(b => b.status === 'finalized').length}
-                </p>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Finalized</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {allBlockStatus.filter(b => b.status === 'finalized').length}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="qproof-card">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-yellow-100 rounded-md flex items-center justify-center">
-                  <svg className="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+            <div className="qproof-card">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-yellow-100 rounded-md flex items-center justify-center">
+                    <svg className="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Pending</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {allBlockStatus.filter(b => b.status === 'pending').length}
+                  </p>
                 </div>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Pending</p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {blockStatus.filter(b => b.status === 'pending').length}
-                </p>
+            </div>
+
+            <div className="qproof-card">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-red-100 rounded-md flex items-center justify-center">
+                    <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Skipped</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {allBlockStatus.filter(b => b.status === 'skipped').length}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Error Message */}
-        {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-md p-4">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">Error</h3>
-                <div className="mt-2 text-sm text-red-700">
-                  <p>{error}</p>
-                </div>
-              </div>
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="qproof-card h-full flex flex-col">
+            <div className="px-6 py-4 border-b border-gray-200 flex-shrink-0">
+              <h2 className="text-lg font-semibold text-gray-900">Block Status</h2>
+              <p className="text-sm text-gray-600 mt-1">
+                Showing {blockStatus.length} of {totalBlocks} blocks
+              </p>
             </div>
-          </div>
-        )}
-
-        {/* Block Status Table */}
-        <div className="qproof-card">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Block Status</h2>
-            <p className="text-sm text-gray-600 mt-1">
-              Showing {blockStatus.length} of {totalBlocks} blocks
-            </p>
-          </div>
-          
-          <BlockStatusTable 
-            blockStatus={blockStatus}
-            onViewBlock={handleViewBlock}
-          />
-          
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="px-6 py-4 border-t border-gray-200">
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
+            
+            <div className="flex-1 overflow-auto">
+              <BlockStatusTable 
+                blockStatus={blockStatus}
+                onViewBlock={handleViewBlock}
               />
             </div>
-          )}
+            
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="px-6 py-4 border-t border-gray-200 flex-shrink-0">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            )}
+          </div>
         </div>
+      </div>
     </div>
   );
 }
