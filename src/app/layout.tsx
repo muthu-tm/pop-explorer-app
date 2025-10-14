@@ -5,6 +5,8 @@ import Footer from "@/components/layout/Footer";
 import ErrorBoundary from "@/components/error/ErrorBoundary";
 import LayoutWrapper from "@/components/layout/LayoutWrapper";
 import { BlockProvider } from "@/contexts/BlockContext";
+import { ToastProvider } from "@/contexts/ToastContext";
+import ToastContainer from "@/components/ui/ToastContainer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -66,12 +68,15 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <ErrorBoundary>
-          <BlockProvider>
-            <LayoutWrapper>
-              {children}
-            </LayoutWrapper>
-            <Footer />
-          </BlockProvider>
+          <ToastProvider>
+            <BlockProvider>
+              <LayoutWrapper>
+                {children}
+              </LayoutWrapper>
+              <Footer />
+            </BlockProvider>
+            <ToastContainer />
+          </ToastProvider>
         </ErrorBoundary>
       </body>
     </html>
