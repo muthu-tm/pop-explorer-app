@@ -56,22 +56,22 @@ export default function Header({ currentBlock, tipBlock }: HeaderProps) {
         
         // Check if it's a 404 error from the search API
         if (error.response?.status === 404) {
-          showToast('No results found. Please try a different search term.', 'error');
+          showToast('No results found. Try a different search term.', 'error');
         } else {
           showToast('Search failed. Please try again.', 'error');
         }
         
         // Fallback to direct navigation
-        if (searchQuery.startsWith('utxo:')) {
-          router.push(`/utxo/${searchQuery}`);
-          setSearchQuery('');
-        } else if (searchQuery.startsWith('wots:')) {
-          router.push(`/key/${searchQuery}`);
-          setSearchQuery('');
-        } else if (/^\d+$/.test(searchQuery)) {
-          router.push(`/block/${searchQuery}`);
-          setSearchQuery('');
-        }
+        // if (searchQuery.startsWith('utxo:')) {
+        //   router.push(`/utxo/${searchQuery}`);
+        //   setSearchQuery('');
+        // } else if (searchQuery.startsWith('wots:')) {
+        //   router.push(`/key/${searchQuery}`);
+        //   setSearchQuery('');
+        // } else if (/^\d+$/.test(searchQuery)) {
+        //   router.push(`/block/${searchQuery}`);
+        //   setSearchQuery('');
+        // }
       }
     }
   };
