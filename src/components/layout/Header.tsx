@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { useBlockNumber } from '@/hooks/useBlockNumber';
 import { useToast } from '@/contexts/ToastContext';
 
@@ -12,7 +11,6 @@ interface HeaderProps {
 }
 
 export default function Header({ currentBlock, tipBlock }: HeaderProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
   const { blockNumber, isLoading: blockLoading } = useBlockNumber();
@@ -80,8 +78,8 @@ export default function Header({ currentBlock, tipBlock }: HeaderProps) {
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center py-3">
           {/* Logo and Title */}
           {/* <div className="flex items-center">
             <div className="flex items-center space-x-3">
@@ -118,14 +116,10 @@ export default function Header({ currentBlock, tipBlock }: HeaderProps) {
           <div className="flex items-center space-x-4">
             {(currentBlock || blockNumber) && (
               <div className="text-right">
-                <div className="text-sm text-black-800">Processing Block :</div>
-                <div className="text-lg font-semibold text-gray-900">
-                  {blockLoading ? '...' : (currentBlock || blockNumber?.block_number)?.toLocaleString()}
-                  {/* {tipBlock && (
-                    <span className="text-sm text-gray-500 ml-1">
-                      (tip: {tipBlock.toLocaleString()})
-                    </span>
-                  )} */}
+                <div className="text-xl font-bold text-gray-900">
+                  Block: <span className="text-xl font-semibold text-gray-600">
+                    {blockLoading ? '...' : (currentBlock || blockNumber?.block_number)?.toLocaleString()}
+                  </span>
                 </div>
               </div>
             )}

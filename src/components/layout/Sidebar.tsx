@@ -66,7 +66,7 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
         w-64
       `}>
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-4 border-b border-gray-200">
           <div className="flex items-center space-x-2">
             <img 
               src="/qproof_logo.png" 
