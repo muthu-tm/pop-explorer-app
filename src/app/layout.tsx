@@ -36,10 +36,10 @@ export const metadata: Metadata = {
     title: 'QProof Explorer',
     description: '⚡ QProof Explorer - Verifiable Bitcoin Provenance, Made Simple',
     type: 'website',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://pop-explorer.vercel.app',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://qproof-explorer.vercel.app',
     images: [
       {
-        url: 'https://pop-explorer.vercel.app/qproof_logo.png',
+        url: 'https://qproof-explorer.vercel.app/qproof_logo.png',
         width: 1200,
         height: 630,
         alt: 'QProof Explorer',
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'QProof Explorer',
     description: '⚡ QProof Explorer - Verifiable Bitcoin Provenance, Made Simple',
-    images: ['https://pop-explorer.vercel.app/qproof_logo.png'],
+    images: ['https://qproof-explorer.vercel.app/qproof_logo.png'],
     creator: '@QProof',
     site: '@QProof',
   },
