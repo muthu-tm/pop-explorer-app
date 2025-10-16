@@ -38,12 +38,13 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   };
 
   return (
-    <div className="flex-1 bg-gray-50 flex">
-      {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
-      
-      {/* Main content area */}
-      <div className="flex-1 flex flex-col lg:ml-0">
+    <div className="flex-1 bg-gray-50 flex flex-col">
+      <div className="flex-1 flex">
+        {/* Sidebar */}
+        <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
+        
+        {/* Main content area */}
+        <div className="flex-1 flex flex-col lg:ml-64">
         {/* Mobile hamburger button */}
         <div className="bg-white border-b border-gray-200 lg:hidden">
           <div className="flex items-center justify-between px-4 py-3">
@@ -74,6 +75,7 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
         <main className="flex-1 flex flex-col">
           {children}
         </main>
+        </div>
       </div>
     </div>
   );

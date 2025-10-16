@@ -7,6 +7,8 @@ import LayoutWrapper from "@/components/layout/LayoutWrapper";
 import { BlockProvider } from "@/contexts/BlockContext";
 import { ToastProvider } from "@/contexts/ToastContext";
 import ToastContainer from "@/components/ui/ToastContainer";
+import IntroVideo from "@/components/ui/SplashScreen";
+import ClientWrapper from "@/components/ui/ClientWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -67,17 +69,20 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col`}
       >
+      <IntroVideo />
         <ErrorBoundary>
           <ToastProvider>
             <BlockProvider>
               <LayoutWrapper>
-                {children}
+                <ClientWrapper>
+                  {children}
+                </ClientWrapper>
               </LayoutWrapper>
-              <Footer />
             </BlockProvider>
             <ToastContainer />
           </ToastProvider>
         </ErrorBoundary>
+        <Footer />
       </body>
     </html>
   );
