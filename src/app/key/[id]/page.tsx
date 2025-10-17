@@ -147,7 +147,7 @@ export default function KeyDetailPage() {
       <div className="border-gray-200">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
-            <h1 className="text-2xl sm:text-xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl sm:text-lg font-bold text-gray-900 mb-2">
               <span className="hidden sm:inline">Key: {key.initial_key}</span>
               <span className="sm:hidden">Key: {key.initial_key.slice(0, 20)}...</span>
             </h1>
@@ -161,202 +161,202 @@ export default function KeyDetailPage() {
       <div className="flex-1 min-h-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-      {/* Summary Card */}
-      <div className="qproof-card mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">Registration Summary</h2>
+          {/* Summary Card */}
+          <div className="qproof-card mb-8">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">Registration Summary</h2>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium text-gray-600">First Included in Block</label>
-              <div className="mt-1">
-                <button
-                  onClick={() => router.push(`/block/${key.block_number}`)}
-                  className="qproof-link font-mono"
-                >
-                  #{key.block_number.toLocaleString()}
-                </button>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-600">First Included in Block</label>
+                  <div className="mt-1">
+                    <button
+                      onClick={() => router.push(`/block/${key.block_number}`)}
+                      className="qproof-link font-mono"
+                    >
+                      #{key.block_number.toLocaleString()}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Status</label>
+                  <div className="mt-1">
+                    <span className={getStatusBadge(key.status)}>
+                      {key.status}
+                    </span>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Created At</label>
+                  <div className="mt-1 font-mono text-sm">
+                    {new Date(key.created_at).toLocaleString()}
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label className="text-sm font-medium text-gray-600">Status</label>
-              <div className="mt-1">
-                <span className={getStatusBadge(key.status)}>
-                  {key.status}
-                </span>
-              </div>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-600">Created At</label>
-              <div className="mt-1 font-mono text-sm">
-                {new Date(key.created_at).toLocaleString()}
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium text-gray-600">Next Key</label>
-              <div className="mt-1">
-                {(key.next_key && key.next_key !== '') ? (
-                  <button
-                    onClick={() => router.push(`/key/${key.next_key}`)}
-                    className="qproof-link font-mono text-sm underline hover:text-[#00A855]"
-                  >
-                    {key.next_key.slice(0, 25)}...
-                  </button>) : (
-                  <span className="qproof-badge qproof-badge-pending">
-                    N/A
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-600">Associated UTXOs</label>
-              <div className="mt-1 text-lg font-semibold text-gray-900">
-                {key.utxos?.length || 0}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* UTXOs Table */}
-      <div className="qproof-card mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">Associated UTXOs</h2>
-
-        {!key.utxos || key.utxos.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">No UTXOs associated with this key</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="qproof-table">
-              <thead>
-                <tr>
-                  <th>UTXO ID</th>
-                  <th>Type</th>
-                  <th>Amount</th>
-                  <th>Since Block</th>
-                  <th>Status</th>
-                  <th>Claim Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {key.utxos && key.utxos.length > 0 ? (
-                  key.utxos.map((utxo) => (
-                    <tr key={utxo.utxo_id} className="hover:bg-gray-50">
-                      <td>
-                        <button
-                          onClick={() => router.push(`/utxo/${utxo.utxo_id}`)}
-                          className="qproof-link font-mono text-sm"
-                        >
-                          utxo:{utxo.utxo_id.slice(0, 8)}...
-                        </button>
-                      </td>
-                      <td>
-                        <span className="qproof-badge qproof-badge-utxo">
-                          UTXO
-                        </span>
-                      </td>
-                      <td className="font-mono">
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Next Key</label>
+                  <div className="mt-1">
+                    {(key.next_key && key.next_key !== '') ? (
+                      <button
+                        onClick={() => router.push(`/key/${key.next_key}`)}
+                        className="qproof-link font-mono text-sm underline hover:text-[#00A855]"
+                      >
+                        {key.next_key.slice(0, 25)}...
+                      </button>) : (
+                      <span className="qproof-badge qproof-badge-pending">
                         N/A
-                      </td>
-                      <td>
-                        <button
-                          onClick={() => router.push(`/block/${utxo.block_number}`)}
-                          className="qproof-link font-mono"
-                        >
-                          #{utxo.block_number.toLocaleString()}
-                        </button>
-                      </td>
-                      <td>
-                        <span className="qproof-badge qproof-badge-pending">
-                          N/A
-                        </span>
-                      </td>
-                      <td>
-                        <span className="qproof-badge qproof-badge-pending">
-                          N/A
-                        </span>
-                      </td>
-                      <td>
-                        <button
-                          onClick={() => router.push(`/utxo/${utxo.utxo_id}`)}
-                          className="text-[#00CA65] hover:text-[#00A855] text-sm font-medium"
-                        >
-                          View Details
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={6} className="text-center py-8 text-gray-500">
-                      No UTXOs associated with this key
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Associated UTXOs</label>
+                  <div className="mt-1 text-lg font-semibold text-gray-900">
+                    {key.utxos?.length || 0}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        )}
-      </div>
 
-      {/* Actions */}
-      <div className="qproof-card">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">Actions</h2>
+          {/* UTXOs Table */}
+          <div className="qproof-card w-[397px] sm:w-auto mb-8">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">Associated UTXOs</h2>
 
-        <div className="flex flex-wrap gap-4">
-          <button
-            onClick={handleViewProof}
-            className="qproof-btn qproof-btn-primary"
-          >
-            Show Full Proof
-          </button>
+            {!key.utxos || key.utxos.length === 0 ? (
+              <p className="text-gray-500 text-center py-8">No UTXOs associated with this key</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="qproof-table">
+                  <thead>
+                    <tr>
+                      <th>UTXO ID</th>
+                      <th>Type</th>
+                      <th>Amount</th>
+                      <th>Since Block</th>
+                      <th>Status</th>
+                      <th>Claim Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {key.utxos && key.utxos.length > 0 ? (
+                      key.utxos.map((utxo) => (
+                        <tr key={utxo.utxo_id} className="hover:bg-gray-50">
+                          <td>
+                            <button
+                              onClick={() => router.push(`/utxo/${utxo.utxo_id}`)}
+                              className="qproof-link font-mono text-sm"
+                            >
+                              utxo:{utxo.utxo_id.slice(0, 8)}...
+                            </button>
+                          </td>
+                          <td>
+                            <span className="qproof-badge qproof-badge-utxo">
+                              UTXO
+                            </span>
+                          </td>
+                          <td className="font-mono">
+                            N/A
+                          </td>
+                          <td>
+                            <button
+                              onClick={() => router.push(`/block/${utxo.block_number}`)}
+                              className="qproof-link font-mono"
+                            >
+                              #{utxo.block_number.toLocaleString()}
+                            </button>
+                          </td>
+                          <td>
+                            <span className="qproof-badge qproof-badge-pending">
+                              N/A
+                            </span>
+                          </td>
+                          <td>
+                            <span className="qproof-badge qproof-badge-pending">
+                              N/A
+                            </span>
+                          </td>
+                          <td>
+                            <button
+                              onClick={() => router.push(`/utxo/${utxo.utxo_id}`)}
+                              className="text-[#00CA65] hover:text-[#00A855] text-sm font-medium"
+                            >
+                              View Details
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={6} className="text-center py-8 text-gray-500">
+                          No UTXOs associated with this key
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
 
-          <button
-            onClick={handleDownloadJSON}
-            className="qproof-btn qproof-btn-secondary"
-          >
-            Download JSON
-          </button>
+          {/* Actions */}
+          <div className="qproof-card">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">Actions</h2>
 
-          <button
-            onClick={handleCopyLink}
-            className="qproof-btn qproof-btn-secondary"
-          >
-            Copy Link
-          </button>
+            <div className="flex flex-wrap gap-4">
+              <button
+                onClick={handleViewProof}
+                className="qproof-btn qproof-btn-primary"
+              >
+                Show Full Proof
+              </button>
 
-          {/* {key.status === 'finalized' && (
-            <button
-              onClick={handleViewProof}
-              className="qproof-btn qproof-btn-primary"
-            >
-              View Proofchain
-            </button>
-          )} */}
-        </div>
-      </div>
+              <button
+                onClick={handleDownloadJSON}
+                className="qproof-btn qproof-btn-secondary"
+              >
+                Download JSON
+              </button>
 
-      <ProofModal
-        isOpen={isProofModalOpen}
-        onClose={handleCloseProofModal}
-        inclusion={{
-          type: 'key',
-          id: key.initial_key,
-          block_number: key.block_number,
-          created_at: key.created_at,
-          status: key.status
-        }}
-        microProof={microProof}
-        proofChain={proofChain}
-        onDownloadJSON={handleDownloadJSON}
-        onCopyLink={handleCopyLink}
-      />
+              <button
+                onClick={handleCopyLink}
+                className="qproof-btn qproof-btn-secondary"
+              >
+                Copy Link
+              </button>
+
+              {/* {key.status === 'finalized' && (
+              <button
+                onClick={handleViewProof}
+                className="qproof-btn qproof-btn-primary"
+              >
+                View Proofchain
+              </button>
+            )} */}
+            </div>
+          </div>
+
+          <ProofModal
+            isOpen={isProofModalOpen}
+            onClose={handleCloseProofModal}
+            inclusion={{
+              type: 'key',
+              id: key.initial_key,
+              block_number: key.block_number,
+              created_at: key.created_at,
+              status: key.status
+            }}
+            microProof={microProof}
+            proofChain={proofChain}
+            onDownloadJSON={handleDownloadJSON}
+            onCopyLink={handleCopyLink}
+          />
         </div>
       </div>
     </div>

@@ -156,7 +156,7 @@ export default function UTXODetailPage() {
       <div className="border-gray-200">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
-            <h1 className="text-2xl sm:text-xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl sm:text-lg font-bold text-gray-900 mb-2">
               <span className="hidden sm:inline">UTXO: {utxo.utxo_id}</span>
               <span className="sm:hidden">UTXO: {utxo.utxo_id.slice(0, 20)}...</span>
             </h1>

@@ -77,8 +77,8 @@ export default function BlocksPage() {
     <div className="flex-1 flex flex-col">
       {/* Full-width header */}
       <div className="border-gray-200">
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
+      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-4 sm:px-0">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Blocks</h1>
               <p className="text-gray-600">
@@ -183,7 +183,7 @@ export default function BlocksPage() {
 
       <div className="flex-1 overflow-hidden">
         <div className="h-full max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="qproof-card h-full flex flex-col">
+          <div className="qproof-card h-full flex flex-col w-[375px] sm:w-auto">
             <div className="px-6 py-4 border-b border-gray-200 flex-shrink-0">
               <h2 className="text-lg font-semibold text-gray-900">Block Status</h2>
               <p className="text-sm text-gray-600 mt-1">
@@ -200,7 +200,7 @@ export default function BlocksPage() {
             
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="px-6 py-4 border-t border-gray-200 flex-shrink-0">
+              <div className="sm:px-6 py-4 border-t border-gray-200 flex-shrink-0">
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}

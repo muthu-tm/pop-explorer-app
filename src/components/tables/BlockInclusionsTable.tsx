@@ -100,7 +100,7 @@ export default function BlockInclusionsTable({
   };
 
   return (
-    <div className="qproof-card">
+    <div className="qproof-card w-[397px] sm:w-auto">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-900">Block Inclusions</h2>
         <div className="flex items-center space-x-4">

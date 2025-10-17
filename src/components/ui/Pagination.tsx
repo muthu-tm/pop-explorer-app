@@ -46,7 +46,7 @@ export default function Pagination({
   }
 
   return (
-    <div className={`flex items-center justify-between ${className}`}>
+    <div className={`flex items-center justify-between flex-col sm:flex-row ${className}`}>
       <div className="flex items-center space-x-2">
         <button
           onClick={() => onPageChange(currentPage - 1)}
@@ -86,7 +86,7 @@ export default function Pagination({
         </button>
       </div>
       
-      <div className="text-sm text-gray-500">
+      <div className="text-sm text-gray-500 mt-2 sm:mt-0">
         Page {currentPage} of {totalPages}
       </div>
     </div>
