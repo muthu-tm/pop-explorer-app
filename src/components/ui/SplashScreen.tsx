@@ -8,7 +8,7 @@ export default function IntroVideo() {
 
   useEffect(() => {
     // Optional: auto-hide after 3.5 seconds if video doesn't emit `ended`
-    const timer = setTimeout(() => setShowVideo(false), 3500);
+    const timer = setTimeout(() => setShowVideo(false), 4000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -16,13 +16,13 @@ export default function IntroVideo() {
     <AnimatePresence>
       {showVideo && (
         <motion.div
-          className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
+          className="fixed inset-0 z-[9999] bg-white flex items-center justify-center"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1 }}
         >
           <video
-            src="/qproof_brand_intro.mp4"
+            src="/qproof_brand_light.mp4"
             autoPlay
             muted
             playsInline
