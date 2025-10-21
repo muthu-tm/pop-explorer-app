@@ -22,10 +22,10 @@ export default function LiveInclusionsTable({
   onViewKey,
   onViewBlock
 }: LiveInclusionsTableProps) {
-  const [sortBy, setSortBy] = useState<'type' | 'blockNumber' | 'status'>('blockNumber');
+  const [sortBy, setSortBy] = useState<'type' | 'blockNumber' | 'status' | 'createdAt'>('blockNumber');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  const handleSort = (column: 'type' | 'blockNumber' | 'status') => {
+  const handleSort = (column: 'type' | 'blockNumber' | 'status' | 'createdAt') => {
     if (sortBy === column) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
@@ -49,6 +49,10 @@ export default function LiveInclusionsTable({
       case 'status':
         aValue = a.status;
         bValue = b.status;
+        break;
+      case 'createdAt':
+        aValue = new Date(a.created_at).getTime();
+        bValue = new Date(b.created_at).getTime();
         break;
       default:
         return 0;
@@ -89,6 +93,17 @@ export default function LiveInclusionsTable({
     } else {
       onViewKey(inclusion.id);
     }
+  };
+
+  const formatCreatedAt = (createdAt: string) => {
+    const date = new Date(createdAt);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
   };
 
   return (
@@ -159,12 +174,25 @@ export default function LiveInclusionsTable({
                   )}
                 </div>
               </th>
+              <th 
+                className="cursor-pointer hover:bg-gray-100"
+                onClick={() => handleSort('createdAt')}
+              >
+                <div className="flex items-center space-x-1">
+                  <span>Created At</span>
+                  {sortBy === 'createdAt' && (
+                    <span className="text-xs">
+                      {sortOrder === 'asc' ? '↑' : '↓'}
+                    </span>
+                  )}
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
             {sortedInclusions.length === 0 ? (
               <tr>
-                <td colSpan={4} className="text-center py-8 text-gray-500">
+                <td colSpan={5} className="text-center py-8 text-gray-500">
                   No inclusions yet. Waiting for new data...
                 </td>
               </tr>
@@ -199,6 +227,9 @@ export default function LiveInclusionsTable({
                     <span className={getStatusBadge(inclusion.status || 'pending')}>
                       {inclusion.status || 'pending'}
                     </span>
+                  </td>
+                  <td className="text-sm text-gray-600">
+                    {formatCreatedAt(inclusion.created_at)}
                   </td>
                 </tr>
               ))
