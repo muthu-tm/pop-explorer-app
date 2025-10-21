@@ -93,7 +93,7 @@ export default function LiveInclusionsTable({
 
   return (
     <div className="h-full flex flex-col">
-      <div className="qproof-card flex-1 flex flex-col">
+      <div className="qproof-card w-[330px] sm:w-auto mx-auto sm:mx-0  flex-1 flex flex-col">
         {/* Block Context Widget */}
         <div className="mb-6 p-4 bg-gray-50 rounded-lg flex-shrink-0">
           <div className="flex justify-between items-center">

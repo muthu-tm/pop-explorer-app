@@ -183,7 +183,7 @@ export default function BlocksPage() {
 
       <div className="flex-1 overflow-hidden">
         <div className="h-full max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="qproof-card h-full flex flex-col w-[375px] sm:w-auto">
+          <div className="qproof-card h-full flex flex-col w-[330px] sm:w-auto mx-auto sm:mx-0">
             <div className="px-6 py-4 border-b border-gray-200 flex-shrink-0">
               <h2 className="text-lg font-semibold text-gray-900">Block Status</h2>
               <p className="text-sm text-gray-600 mt-1">

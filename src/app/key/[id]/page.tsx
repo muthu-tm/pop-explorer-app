@@ -225,7 +225,7 @@ export default function KeyDetailPage() {
           </div>
 
           {/* UTXOs Table */}
-          <div className="qproof-card w-[397px] sm:w-auto mb-8">
+          <div className="qproof-card w-[330px] sm:w-auto mx-auto sm:mx-0 mb-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Associated UTXOs</h2>
 
             {!key.utxos || key.utxos.length === 0 ? (
