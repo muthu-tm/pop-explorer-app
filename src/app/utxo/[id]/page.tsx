@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { UTXO, MicroProof, ProofChain, Vow, Input } from '@/types';
+import { UTXO, MicroProof, ProofChain, Vow, VowInput } from '@/types';
 import { ApiService } from '@/services/api';
 import ProofModal from '@/components/modals/ProofModal';
 
@@ -13,7 +13,6 @@ export default function UTXODetailPage() {
 
   const [utxo, setUtxo] = useState<UTXO | null>(null);
   const [vows, setVows] = useState<Vow[] | null>(null);
-  const [inputs, setInputs] = useState<Input[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [isProofModalOpen, setIsProofModalOpen] = useState(false);
   const [microProof, setMicroProof] = useState<MicroProof | null>(null);
@@ -26,12 +25,10 @@ export default function UTXODetailPage() {
         const response = await ApiService.getUTXO(utxoId);
         setUtxo(response.utxo);
         setVows(response.vows);
-        setInputs(response.inputs);
       } catch (error) {
         console.error('Error loading UTXO:', error);
         setUtxo(null);
         setVows(null);
-        setInputs(null);
       } finally {
         setLoading(false);
       }
@@ -86,7 +83,6 @@ export default function UTXODetailPage() {
     const data = {
       utxo,
       vows,
-      inputs,
       microProof,
       proofChain
     };
@@ -251,10 +247,10 @@ export default function UTXODetailPage() {
               <p className="text-gray-500">No vows found for this UTXO</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {vows.map((vow, index) => (
                 <div key={index} className="border border-gray-200 rounded-lg p-4">
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid md:grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="text-sm font-medium text-gray-600">Vow Type</label>
                       <div className="mt-1">
@@ -302,54 +298,62 @@ export default function UTXODetailPage() {
                         </div>
                       </div>
                     )}
+
+                    {/* {vow.vow_id !== undefined && (
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Vow ID</label>
+                        <div className="mt-1 font-mono text-sm">
+                          {vow.vow_id}
+                        </div>
+                      </div>
+                    )} */}
                   </div>
+
+                  {/* Inputs within this vow */}
+                  {vow.inputs && vow.inputs.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <h4 className="text-sm font-medium text-gray-700 mb-3">Inputs</h4>
+                      <div className="space-y-2">
+                        {vow.inputs.map((input: VowInput, inputIndex: number) => (
+                          <div key={inputIndex} className="bg-gray-50 rounded p-3">
+                            <div className="grid md:grid-cols-2 gap-4">
+                              <div>
+                                <label className="text-xs font-medium text-gray-600">UTXO ID</label>
+                                <div className="mt-1">
+                                  <button
+                                    onClick={() => router.push(`/utxo/${input.utxo_id}`)}
+                                    className="qproof-link font-mono text-xs underline hover:text-[#00A855]"
+                                  >
+                                    {input.utxo_id.slice(0, 20)}...
+                                  </button>
+                                </div>
+                              </div>
+                              
+                              <div>
+                                <label className="text-xs font-medium text-gray-600">Value</label>
+                                <div className="mt-1 font-mono text-xs">
+                                  {input.value.toFixed(8)} BTC
+                                </div>
+                              </div>
+
+                              {/* <div>
+                                <label className="text-xs font-medium text-gray-600">Created At</label>
+                                <div className="mt-1 font-mono text-xs">
+                                  {new Date(input.created_at).toLocaleString()}
+                                </div>
+                              </div> */}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {/* Inputs Section */}
-        <div className="qproof-card mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Inputs</h2>
-          
-          {inputs === null ? (
-            <div className="text-center py-8">
-              <p className="text-gray-500">No inputs data available</p>
-            </div>
-          ) : inputs.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-500">No inputs found for this UTXO</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {inputs.map((input, index) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium text-gray-600">UTXO ID</label>
-                      <div className="mt-1">
-                        <button
-                          onClick={() => router.push(`/utxo/${input.utxo_id}`)}
-                          className="qproof-link font-mono text-sm underline hover:text-[#00A855]"
-                        >
-                          {input.utxo_id.slice(0, 25)}...
-                        </button>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <label className="text-sm font-medium text-gray-600">Value</label>
-                      <div className="mt-1 font-mono text-sm">
-                        {input.value.toFixed(8)} BTC
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
 
         {/* Actions */}
         <div className="qproof-card">

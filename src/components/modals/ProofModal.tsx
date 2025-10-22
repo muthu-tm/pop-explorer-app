@@ -65,7 +65,7 @@ export default function ProofModal({
           >
             Microproof
           </button>
-          {proofChain && (
+          {/* {proofChain && (
             <button
               onClick={() => setActiveTab('proofchain')}
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
@@ -76,7 +76,7 @@ export default function ProofModal({
             >
               Proofchain
             </button>
-          )}
+          )} */}
         </div>
 
         {/* Microproof Tab */}
@@ -202,9 +202,8 @@ export default function ProofModal({
         )}
 
         {/* Proofchain Tab */}
-        {activeTab === 'proofchain' && proofChain && (
+        {/* {activeTab === 'proofchain' && proofChain && (
           <div className="space-y-6">
-            {/* Proofchain Info */}
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Proofchain Information</h3>
               <div className="bg-gray-50 p-4 rounded-lg space-y-2">
@@ -233,7 +232,6 @@ export default function ProofModal({
               </div>
             </div>
 
-            {/* Proof Layers */}
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Proof Layers</h3>
               <div className="space-y-4">
@@ -256,7 +254,7 @@ export default function ProofModal({
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Actions */}
         <div className="flex justify-end space-x-3 mt-8 pt-6 border-t border-gray-200">

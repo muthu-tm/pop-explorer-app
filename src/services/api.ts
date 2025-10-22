@@ -93,7 +93,6 @@ export class ApiService {
   static async getUTXO(utxoId: string): Promise<{
     utxo: UTXO;
     vows: Vow[] | null;
-    inputs: Input[] | null;
   }> {
     const response = await ApiClient.get(`/utxo/${utxoId}`);
     return response.data;

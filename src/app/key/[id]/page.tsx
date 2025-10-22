@@ -79,8 +79,7 @@ export default function KeyDetailPage() {
 
     const data = {
       key,
-      microProof,
-      proofChain
+      microProof
     };
 
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -317,12 +316,12 @@ export default function KeyDetailPage() {
                 Show Full Proof
               </button>
 
-              <button
+              {/* <button
                 onClick={handleDownloadJSON}
                 className="qproof-btn qproof-btn-secondary"
               >
                 Download JSON
-              </button>
+              </button> */}
 
               <button
                 onClick={handleCopyLink}

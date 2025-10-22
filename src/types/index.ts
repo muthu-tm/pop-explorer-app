@@ -198,11 +198,19 @@ export interface UTXOStats {
 }
 
 // Vow and Input types
+export interface VowInput {
+  utxo_id: string;
+  value: number;
+  created_at: string;
+}
+
 export interface Vow {
   vow_type: 'send' | 'receive';
   receiver_pubkey?: string;
   value?: number;
   initial_block?: number;
+  // vow_id?: number;
+  inputs: VowInput[];
 }
 
 export interface Input {

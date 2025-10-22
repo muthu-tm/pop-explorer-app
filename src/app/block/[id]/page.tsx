@@ -98,8 +98,7 @@ export default function BlockDetailPage() {
   const handleDownloadJSON = () => {
     const data = {
       inclusion: selectedInclusion,
-      microProof,
-      proofChain
+      microProof
     };
     
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
