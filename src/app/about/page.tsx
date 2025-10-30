@@ -54,43 +54,62 @@ export default function AboutPage() {
             </ul>
           </section>
 
+
           <section className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">How does it work?</h2>
-            <p className="text-gray-700 mb-4">
+            <p className="text-gray-700 mb-6">
               The protocol uses quantum-resistant cryptography to double-sign Bitcoin transactions. This means every action is bound both by Bitcoin&apos;s proof-of-work consensus and by QProof&apos;s cryptographic ledger.
             </p>
-            <div className="bg-gray-50 p-6 rounded-lg mb-4">
-              <ol className="list-decimal list-inside text-gray-700 space-y-2">
-                <li>Wallets generate microproofs and final proofs.</li>
-                <li>Servers verify that the keys and UTXOs were registered at least one block before they are used.</li>
-                <li>QProof Explorer displays these records and lets anyone independently check provenance and inclusion proofs.</li>
-              </ol>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-[#f9fafc] p-6 rounded-lg shadow-sm">
+                <div className="text-[#00CA65] text-4xl font-bold mb-3">01</div>
+                <p className="text-gray-700">
+                  Wallets generate microproofs and final proofs.
+                </p>
+              </div>
+              <div className="bg-[#f9fafc] p-6 rounded-lg shadow-sm">
+                <div className="text-[#00CA65] text-4xl font-bold mb-3">02</div>
+                <p className="text-gray-700">
+                  Servers verify that the keys and UTXOs were registered at least one block before they are used.
+                </p>
+              </div>
+              <div className="bg-[#f9fafc] p-6 rounded-lg shadow-sm">
+                <div className="text-[#00CA65] text-4xl font-bold mb-3">03</div>
+                <p className="text-gray-700">
+                  QProof Explorer displays these records and lets anyone independently check provenance and inclusion proofs.
+                </p>
+              </div>
             </div>
           </section>
 
+
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Key Features</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Live Stream View</h3>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Key Features</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-[#f9fafc] p-6 rounded-lg shadow-sm">
+                <div className="text-[#00CA65] text-4xl font-bold mb-3">01</div>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">Live Stream View</h3>
                 <p className="text-gray-700">
                   Watch inclusions being added to the current block in real-time as they are processed and finalized.
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Deep Search</h3>
+              <div className="bg-[#f9fafc] p-6 rounded-lg shadow-sm">
+                <div className="text-[#00CA65] text-4xl font-bold mb-3">02</div>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">Deep Search</h3>
                 <p className="text-gray-700">
                   Search by UTXO ID, public key, or block number to dive deep into specific transaction details.
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Proof Verification</h3>
+              <div className="bg-[#f9fafc] p-6 rounded-lg shadow-sm">
+                <div className="text-[#00CA65] text-4xl font-bold mb-3">03</div>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">Proof Verification</h3>
                 <p className="text-gray-700">
                   Access complete Merkle proofs and verify the cryptographic integrity of any inclusion.
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Provenance Tracking</h3>
+              <div className="bg-[#f9fafc] p-6 rounded-lg shadow-sm">
+                <div className="text-[#00CA65] text-4xl font-bold mb-3">04</div>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">Provenance Tracking</h3>
                 <p className="text-gray-700">
                   Trace the complete history of UTXOs and keys from their first registration to current status.
                 </p>
@@ -98,32 +117,37 @@ export default function AboutPage() {
             </div>
           </section>
 
+
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Getting Started</h2>
-            <div className="bg-[#00CA65] bg-opacity-10 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Quick Start Guide</h3>
-              <ol className="list-decimal list-inside text-gray-700 space-y-2">
-                <li><strong>Home Page:</strong> Start by viewing the live stream of current block inclusions</li>
-                <li><strong>Search:</strong> Use the search bar to find specific UTXOs, keys, or blocks</li>
-                <li><strong>Explore:</strong> Click on any ID to view detailed information and proofs</li>
-                <li><strong>Verify:</strong> Check proof verification status and download complete proof data</li>
+            <div className="bg-[#dcffe1] p-6 rounded-lg shadow-sm">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Getting Started</h2>
+
+
+              <h3 className="text-lg text-gray-900 mb-4 text-center">Quick Start Guide</h3>
+              <ol className="list-decimal list-inside text-gray-700 text-center space-y-2">
+                <li>Home Page: Start by viewing the live stream of current block inclusions</li>
+                <li>Search: Use the search bar to find specific UTXOs, keys, or blocks</li>
+                <li>Explore: Click on any ID to view detailed information and proofs</li>
+                <li>Verify: Check proof verification status and download complete proof data</li>
               </ol>
             </div>
           </section>
 
-          <section className="text-center">
-            <div className="bg-gray-50 p-8 rounded-lg">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+
+          <section className="mb-8">
+            <div className="bg-[#f9fafc] p-6 text-center md:p-8 rounded-lg shadow-sm mx-auto">
+              <h2 className="text-2xl font-bold text-gray-900 mb-3">
                 ⚡ QProof Explorer
               </h2>
-              <p className="text-lg text-gray-600 mb-4">
+              <p className="text-base text-gray-700 mb-3">Quick Start Guide</p>
+              <p className="text-base text-gray-700 mb-4">
                 Verifiable Bitcoin Provenance, Made Simple
               </p>
-              <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 text-sm text-gray-500">
+              {/* <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-sm text-gray-500 justify-center">
                 <Link href="/" className="hover:text-[#00CA65] transition-colors">Home</Link>
                 <a href="#" className="hover:text-[#00CA65] transition-colors">API Documentation</a>
                 <a href="#" className="hover:text-[#00CA65] transition-colors">GitHub Repository</a>
-              </div>
+              </div> */}
             </div>
           </section>
         </div>
