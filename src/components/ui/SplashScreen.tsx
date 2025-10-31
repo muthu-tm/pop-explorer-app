@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function IntroVideo() {
   const [showVideo, setShowVideo] = useState(true);

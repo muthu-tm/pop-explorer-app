@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { TbArrowsDownUp } from 'react-icons/tb';
 import { Inclusion } from '@/types';
 
 interface BlockInclusionsTableProps {
@@ -14,14 +15,14 @@ export default function BlockInclusionsTable({
   inclusions,
   onViewUTXO,
   onViewKey,
-  onViewProof
+  onViewProof,
 }: BlockInclusionsTableProps) {
-  const [sortBy, setSortBy] = useState<'type' | 'id' | 'status'>('id');
+  const [sortBy, setSortBy] = useState<'type' | 'id' | 'status' | 'created_at'>('id');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const handleSort = (column: 'type' | 'id' | 'status') => {
+  const handleSort = (column: 'type' | 'id' | 'status' | 'created_at') => {
     if (sortBy === column) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
@@ -32,7 +33,7 @@ export default function BlockInclusionsTable({
 
   const sortedInclusions = [...inclusions].sort((a, b) => {
     let aValue: any, bValue: any;
-    
+
     switch (sortBy) {
       case 'type':
         aValue = a.type;
@@ -45,6 +46,10 @@ export default function BlockInclusionsTable({
       case 'status':
         aValue = a.status || 'pending';
         bValue = b.status || 'pending';
+        break;
+      case 'created_at':
+        aValue = new Date(a.created_at).getTime();
+        bValue = new Date(b.created_at).getTime();
         break;
       default:
         return 0;
@@ -61,7 +66,7 @@ export default function BlockInclusionsTable({
   const paginatedInclusions = sortedInclusions.slice(startIndex, endIndex);
 
   const getStatusBadge = (status: string) => {
-    const baseClasses = "qproof-badge";
+    const baseClasses = 'qproof-badge';
     switch (status) {
       case 'finalized':
         return `${baseClasses} qproof-badge-finalized`;
@@ -75,7 +80,7 @@ export default function BlockInclusionsTable({
   };
 
   const getTypeBadge = (type: string) => {
-    const baseClasses = "qproof-badge";
+    const baseClasses = 'qproof-badge';
     switch (type) {
       case 'utxo':
         return `${baseClasses} qproof-badge-utxo`;
@@ -102,7 +107,7 @@ export default function BlockInclusionsTable({
   return (
     <div className="qproof-card w-[330px] sm:w-auto mx-auto sm:mx-0">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-900">Block Inclusions</h2>
+        <h2 className="text-xl font-bold text-gray-900">Block Inclusions</h2>
         <div className="flex items-center space-x-4">
           <label className="text-sm text-gray-600">Rows per page:</label>
           <select
@@ -123,47 +128,51 @@ export default function BlockInclusionsTable({
         <table className="qproof-table">
           <thead>
             <tr>
-              <th 
-                className="cursor-pointer hover:bg-gray-100"
+              <th
+                className={`cursor-pointer hover:bg-gray-100 uppercase ${sortBy === 'type' ? 'text-black' : 'text-gray-500'}`}
                 onClick={() => handleSort('type')}
               >
                 <div className="flex items-center space-x-1">
-                  <span>Type</span>
-                  {sortBy === 'type' && (
-                    <span className="text-xs">
-                      {sortOrder === 'asc' ? '↑' : '↓'}
-                    </span>
-                  )}
+                  <span className="text-transform-uppercase text-sm">Type</span>
+                  <TbArrowsDownUp
+                    className={`w-4 h-4 ${sortBy === 'type' ? 'text-black' : 'text-[#6a7282]'}`}
+                  />
                 </div>
               </th>
-              <th 
-                className="cursor-pointer hover:bg-gray-100"
+              <th
+                className={`cursor-pointer hover:bg-gray-100 uppercase ${sortBy === 'id' ? 'text-black' : 'text-gray-500'}`}
                 onClick={() => handleSort('id')}
               >
                 <div className="flex items-center space-x-1">
-                  <span>ID</span>
-                  {sortBy === 'id' && (
-                    <span className="text-xs">
-                      {sortOrder === 'asc' ? '↑' : '↓'}
-                    </span>
-                  )}
+                  <span className="text-transform-uppercase text-sm">ID</span>
+                  <TbArrowsDownUp
+                    className={`w-4 h-4 ${sortBy === 'id' ? 'text-black' : 'text-[#6a7282]'}`}
+                  />
                 </div>
               </th>
-              <th>Created At</th>
-              <th 
-                className="cursor-pointer hover:bg-gray-100"
+              <th
+                className={`cursor-pointer hover:bg-gray-100 uppercase ${sortBy === 'created_at' ? 'text-black' : 'text-gray-500'}`}
+                onClick={() => handleSort('created_at')}
+              >
+                <div className="flex items-center space-x-1">
+                  <span className="text-transform-uppercase text-sm">Created At</span>
+                  <TbArrowsDownUp
+                    className={`w-4 h-4 ${sortBy === 'created_at' ? 'text-black' : 'text-[#6a7282]'}`}
+                  />
+                </div>
+              </th>
+              <th
+                className={`cursor-pointer hover:bg-gray-100 uppercase ${sortBy === 'status' ? 'text-black' : 'text-gray-500'}`}
                 onClick={() => handleSort('status')}
               >
                 <div className="flex items-center space-x-1">
-                  <span>Status</span>
-                  {sortBy === 'status' && (
-                    <span className="text-xs">
-                      {sortOrder === 'asc' ? '↑' : '↓'}
-                    </span>
-                  )}
+                  <span className="text-transform-uppercase text-sm">Status</span>
+                  <TbArrowsDownUp
+                    className={`w-4 h-4 ${sortBy === 'status' ? 'text-black' : 'text-[#6a7282]'}`}
+                  />
                 </div>
               </th>
-              <th>Action</th>
+              <th className="text-transform-uppercase text-sm text-gray-500">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -177,19 +186,16 @@ export default function BlockInclusionsTable({
               paginatedInclusions.map((inclusion, index) => (
                 <tr key={`${inclusion.type}-${inclusion.id}-${index}`} className="hover:bg-gray-50">
                   <td>
-                    <span className={getTypeBadge(inclusion.type)}>
-                      {inclusion.type}
-                    </span>
+                    <span className={getTypeBadge(inclusion.type)}>{inclusion.type}</span>
                   </td>
                   <td>
                     <button
                       onClick={() => handleItemClick(inclusion)}
                       className="qproof-link font-mono text-sm"
                     >
-                      {inclusion.type === 'utxo' 
+                      {inclusion.type === 'utxo'
                         ? `utxo:${inclusion.id.slice(0, 8)}...`
-                        : `${inclusion.id.slice(0, 15)}...`
-                      }
+                        : `${inclusion.id.slice(0, 15)}...`}
                     </button>
                   </td>
                   <td className="text-sm text-gray-600">
@@ -207,9 +213,24 @@ export default function BlockInclusionsTable({
                         className="text-gray-400 hover:text-[#00CA65] transition-colors"
                         title="View proof"
                       >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                          />
                         </svg>
                       </button>
                     </div>
@@ -225,7 +246,8 @@ export default function BlockInclusionsTable({
       {totalPages > 1 && (
         <div className="flex items-center justify-between mt-6">
           <div className="text-sm text-gray-600">
-            Showing {startIndex + 1} to {Math.min(endIndex, sortedInclusions.length)} of {sortedInclusions.length} inclusions
+            Showing {startIndex + 1} to {Math.min(endIndex, sortedInclusions.length)} of{' '}
+            {sortedInclusions.length} inclusions
           </div>
           <div className="flex items-center space-x-2">
             <button

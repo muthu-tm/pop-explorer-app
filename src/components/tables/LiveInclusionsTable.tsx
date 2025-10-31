@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { TbArrowsDownUp } from 'react-icons/tb';
 import { Inclusion } from '@/types';
 
 interface LiveInclusionsTableProps {
@@ -20,9 +21,11 @@ export default function LiveInclusionsTable({
   estimatedFinalization,
   onViewUTXO,
   onViewKey,
-  onViewBlock
+  onViewBlock,
 }: LiveInclusionsTableProps) {
-  const [sortBy, setSortBy] = useState<'type' | 'blockNumber' | 'status' | 'createdAt'>('blockNumber');
+  const [sortBy, setSortBy] = useState<'type' | 'blockNumber' | 'status' | 'createdAt'>(
+    'blockNumber'
+  );
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   const handleSort = (column: 'type' | 'blockNumber' | 'status' | 'createdAt') => {
@@ -36,7 +39,7 @@ export default function LiveInclusionsTable({
 
   const sortedInclusions = [...inclusions].sort((a, b) => {
     let aValue: any, bValue: any;
-    
+
     switch (sortBy) {
       case 'type':
         aValue = a.type;
@@ -64,7 +67,7 @@ export default function LiveInclusionsTable({
   });
 
   const getStatusBadge = (status: string) => {
-    const baseClasses = "qproof-badge";
+    const baseClasses = 'qproof-badge';
     switch (status) {
       case 'finalized':
         return `${baseClasses} qproof-badge-finalized`;
@@ -76,7 +79,7 @@ export default function LiveInclusionsTable({
   };
 
   const getTypeBadge = (type: string) => {
-    const baseClasses = "qproof-badge";
+    const baseClasses = 'qproof-badge';
     switch (type) {
       case 'utxo':
         return `${baseClasses} qproof-badge-utxo`;
@@ -108,17 +111,15 @@ export default function LiveInclusionsTable({
 
   return (
     <div className="h-full flex flex-col">
-      <div className="qproof-card w-[330px] sm:w-auto mx-auto sm:mx-0  flex-1 flex flex-col">
+      <div className="  w-full sm:w-auto mx-auto sm:mx-0  flex-1 flex flex-col">
         {/* Block Context Widget */}
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg flex-shrink-0">
+        <div className="qproof-card qproof-card-muted mb-6 p-4 rounded-lg flex-shrink-0">
           <div className="flex justify-between items-center">
             <div>
               <h3 className="text-lg font-semibold text-gray-900">
                 Current Block: #{currentBlock.toLocaleString()}
               </h3>
-              <p className="text-sm text-gray-600">
-                {inclusionCount} inclusions so far
-              </p>
+              <p className="text-sm text-gray-600">{inclusionCount} inclusions so far</p>
             </div>
             {estimatedFinalization && (
               <div className="text-right">
@@ -130,115 +131,108 @@ export default function LiveInclusionsTable({
         </div>
 
         {/* Table */}
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1  overflow-auto">
           <table className="qproof-table">
-          <thead>
-            <tr>
-              <th 
-                className="cursor-pointer hover:bg-gray-100"
-                onClick={() => handleSort('type')}
-              >
-                <div className="flex items-center space-x-1">
-                  <span>Type</span>
-                  {sortBy === 'type' && (
-                    <span className="text-xs">
-                      {sortOrder === 'asc' ? '↑' : '↓'}
-                    </span>
-                  )}
-                </div>
-              </th>
-              <th 
-                className="cursor-pointer hover:bg-gray-100"
-                onClick={() => handleSort('blockNumber')}
-              >
-                <div className="flex items-center space-x-1">
-                  <span>ID</span>
-                  {sortBy === 'blockNumber' && (
-                    <span className="text-xs">
-                      {sortOrder === 'asc' ? '↑' : '↓'}
-                    </span>
-                  )}
-                </div>
-              </th>
-              <th>Since Block</th>
-              <th 
-                className="cursor-pointer hover:bg-gray-100"
-                onClick={() => handleSort('status')}
-              >
-                <div className="flex items-center space-x-1">
-                  <span>Status</span>
-                  {sortBy === 'status' && (
-                    <span className="text-xs">
-                      {sortOrder === 'asc' ? '↑' : '↓'}
-                    </span>
-                  )}
-                </div>
-              </th>
-              <th 
-                className="cursor-pointer hover:bg-gray-100"
-                onClick={() => handleSort('createdAt')}
-              >
-                <div className="flex items-center space-x-1">
-                  <span>Created At</span>
-                  {sortBy === 'createdAt' && (
-                    <span className="text-xs">
-                      {sortOrder === 'asc' ? '↑' : '↓'}
-                    </span>
-                  )}
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedInclusions.length === 0 ? (
+            <thead>
               <tr>
-                <td colSpan={5} className="text-center py-8 text-gray-500">
-                  No inclusions yet. Waiting for new data...
-                </td>
+                <th
+                  className={`cursor-pointer hover:bg-gray-100 uppercase ${sortBy === 'type' ? 'text-black' : 'text-gray-500'}`}
+                  onClick={() => handleSort('type')}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span className="text-transform-uppercase text-sm">Type</span>
+                    <TbArrowsDownUp
+                      className={`w-4 h-4 ${sortBy === 'type' ? 'text-black' : 'text-[#6a7282]'}`}
+                    />
+                  </div>
+                </th>
+                <th
+                  className={`cursor-pointer hover:bg-gray-100 uppercase ${sortBy === 'blockNumber' ? 'text-black' : 'text-gray-500'}`}
+                  onClick={() => handleSort('blockNumber')}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span className="text-transform-uppercase text-sm">ID</span>
+                    <TbArrowsDownUp
+                      className={`w-4 h-4 ${sortBy === 'blockNumber' ? 'text-black' : 'text-[#6a7282]'}`}
+                    />
+                  </div>
+                </th>
+                <th className="cursor-pointer text-gray-500 hover:bg-gray-100 uppercase">
+                  Since Block
+                </th>
+                <th
+                  className={`cursor-pointer hover:bg-gray-100 uppercase ${sortBy === 'status' ? 'text-black' : 'text-gray-500'}`}
+                  onClick={() => handleSort('status')}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span className="text-transform-uppercase text-sm">Status</span>
+                    <TbArrowsDownUp
+                      className={`w-4 h-4 ${sortBy === 'status' ? 'text-black' : 'text-[#6a7282]'}`}
+                    />
+                  </div>
+                </th>
+                <th
+                  className={`cursor-pointer hover:bg-gray-100 uppercase ${sortBy === 'createdAt' ? 'text-black' : 'text-gray-500'}`}
+                  onClick={() => handleSort('createdAt')}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span className="text-transform-uppercase text-sm">Created At</span>
+                    <TbArrowsDownUp
+                      className={`w-4 h-4 ${sortBy === 'createdAt' ? 'text-black' : 'text-[#6a7282]'}`}
+                    />
+                  </div>
+                </th>
               </tr>
-            ) : (
-              sortedInclusions.map((inclusion, index) => (
-                <tr key={`${inclusion.type}-${inclusion.id}-${index}`} className="hover:bg-gray-50">
-                  <td>
-                    <span className={getTypeBadge(inclusion.type)}>
-                      {inclusion.type}
-                    </span>
-                  </td>
-                  <td>
-                    <button
-                      onClick={() => handleItemClick(inclusion)}
-                      className="qproof-link font-mono text-sm"
-                    >
-                      {inclusion.type === 'utxo' 
-                        ? `utxo:${inclusion.id.slice(0, 8)}...`
-                        : `wots:${inclusion.id.slice(0, 8)}...`
-                      }
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      onClick={() => onViewBlock(inclusion.block_number)}
-                      className="qproof-link font-mono"
-                    >
-                      #{inclusion.block_number.toLocaleString()}
-                    </button>
-                  </td>
-                  <td>
-                    <span className={getStatusBadge(inclusion.status || 'pending')}>
-                      {inclusion.status || 'pending'}
-                    </span>
-                  </td>
-                  <td className="text-sm text-gray-600">
-                    {formatCreatedAt(inclusion.created_at)}
+            </thead>
+            <tbody>
+              {sortedInclusions.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="text-center py-8 text-gray-500">
+                    No inclusions yet. Waiting for new data...
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
+              ) : (
+                sortedInclusions.map((inclusion, index) => (
+                  <tr
+                    key={`${inclusion.type}-${inclusion.id}-${index}`}
+                    className="hover:bg-gray-50"
+                  >
+                    <td>
+                      <span className={getTypeBadge(inclusion.type)}>{inclusion.type}</span>
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => handleItemClick(inclusion)}
+                        className="qproof-link font-mono text-sm"
+                      >
+                        {inclusion.type === 'utxo'
+                          ? `utxo:${inclusion.id.slice(0, 8)}...`
+                          : `wots:${inclusion.id.slice(0, 8)}...`}
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => onViewBlock(inclusion.block_number)}
+                        className="qproof-link font-mono"
+                      >
+                        #{inclusion.block_number.toLocaleString()}
+                      </button>
+                    </td>
+                    <td>
+                      <span className={getStatusBadge(inclusion.status || 'pending')}>
+                        {inclusion.status || 'pending'}
+                      </span>
+                    </td>
+                    <td className="text-sm text-gray-600">
+                      {formatCreatedAt(inclusion.created_at)}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
           </table>
         </div>
       </div>
     </div>
   );
 }
-

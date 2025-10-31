@@ -8,22 +8,18 @@ interface BlockStatusTableProps {
   onViewBlock: (blockNumber: number) => void;
 }
 
-const BlockStatusTable: React.FC<BlockStatusTableProps> = ({
-  blockStatus,
-  onViewBlock,
-}) => {
+const BlockStatusTable: React.FC<BlockStatusTableProps> = ({ blockStatus, onViewBlock }) => {
   if (blockStatus.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
-        {`No block status found. Click "Load Status" to fetch data.`}
-        {/* No block status found. Click 'Load Status' to fetch data. */}
+        {`No block status found. Click "Refresh" to fetch data.`}
       </div>
     );
   }
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full  divide-y divide-gray-200" >
+      <table className="min-w-full  divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
             <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -47,9 +43,9 @@ const BlockStatusTable: React.FC<BlockStatusTableProps> = ({
                 <StatusBadge status={status.status} />
               </td>
               <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
-                <button 
-                  onClick={() => onViewBlock(status.block_number)} 
-                  className="text-indigo-600 hover:text-indigo-900 transition-colors"
+                <button
+                  onClick={() => onViewBlock(status.block_number)}
+                  className="cursor-pointer text-[#00ca65] hover:text-[#04954c] transition-colors"
                 >
                   View Details
                 </button>
@@ -60,5 +56,5 @@ const BlockStatusTable: React.FC<BlockStatusTableProps> = ({
       </table>
     </div>
   );
-    }
-    export default BlockStatusTable;
+};
+export default BlockStatusTable;

@@ -1,11 +1,11 @@
 'use client';
 import axios from 'axios';
-import { 
-  Message, 
-  ProofChain, 
-  BlockStatus, 
-  ValidationResult, 
-  SearchFilters, 
+import {
+  Message,
+  ProofChain,
+  BlockStatus,
+  ValidationResult,
+  SearchFilters,
   BlockNumber,
   UTXO,
   Key,
@@ -19,7 +19,7 @@ import {
   BlockStats,
   UTXOStats,
   Vow,
-  Input
+  Input,
 } from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || 'http://localhost:8000';
@@ -98,15 +98,18 @@ export class ApiService {
     return response.data;
   }
 
-  static async getUTXOs(page = 1, limit = 50): Promise<{
+  static async getUTXOs(
+    page = 1,
+    limit = 50
+  ): Promise<{
     utxos: UTXO[];
     total: number;
     page: number;
     limit: number;
     total_pages: number;
   }> {
-    const response = await ApiClient.get('/utxos', { 
-      params: { page, limit } 
+    const response = await ApiClient.get('/utxos', {
+      params: { page, limit },
     });
     return response.data;
   }
@@ -120,15 +123,18 @@ export class ApiService {
     return response.data;
   }
 
-  static async getKeys(page = 1, limit = 50): Promise<{
+  static async getKeys(
+    page = 1,
+    limit = 50
+  ): Promise<{
     keys: Key[];
     total: number;
     page: number;
     limit: number;
     total_pages: number;
   }> {
-    const response = await ApiClient.get('/keys', { 
-      params: { page, limit } 
+    const response = await ApiClient.get('/keys', {
+      params: { page, limit },
     });
     return response.data;
   }
@@ -142,15 +148,18 @@ export class ApiService {
     return response.data;
   }
 
-  static async getBlocks(page = 1, limit = 50): Promise<{
+  static async getBlocks(
+    page = 1,
+    limit = 50
+  ): Promise<{
     blocks: Block[];
     total: number;
     page: number;
     limit: number;
     total_pages: number;
   }> {
-    const response = await ApiClient.get('/blocks', { 
-      params: { page, limit } 
+    const response = await ApiClient.get('/blocks', {
+      params: { page, limit },
     });
     return response.data;
   }
@@ -242,14 +251,14 @@ export class ApiService {
     }
 
     const params: any = { block: filters.blockNumber };
-    
+
     if (filters.threadID) {
       params.thread = filters.threadID;
     }
     if (filters.leafIndex) {
       params.leaf = filters.leafIndex;
     }
-    
+
     const response = await ApiClient.get('/messages', { params });
     return response.data.messages || [];
   }
@@ -260,7 +269,11 @@ export class ApiService {
     return response.data;
   }
 
-  static async validateProof(block: string, thread: string, leaf: string): Promise<ValidationResult> {
+  static async validateProof(
+    block: string,
+    thread: string,
+    leaf: string
+  ): Promise<ValidationResult> {
     const params = { block, thread, leaf };
     const response = await ApiClient.get('/validate', { params });
     return response.data;

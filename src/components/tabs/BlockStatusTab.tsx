@@ -25,16 +25,11 @@ const BlockStatusTab: React.FC<BlockStatusTabProps> = ({
           Load Status
         </LoadingButton>
       </div>
-      
+
       {blockStatus.length === 0 ? (
-        <EmptyState 
-          message="No block status found. Click 'Load Status' to fetch data."
-        />
+        <EmptyState message="No block status found. Click 'Load Status' to fetch data." />
       ) : (
-        <BlockStatusTable 
-          blockStatus={blockStatus} 
-          onViewBlock={onViewBlock} 
-        />
+        <BlockStatusTable blockStatus={blockStatus} onViewBlock={onViewBlock} />
       )}
     </div>
   );

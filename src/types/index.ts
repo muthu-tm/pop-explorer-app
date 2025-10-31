@@ -1,8 +1,14 @@
-
 // QProof Explorer Types
 
 // UI Types
-export type TabId = 'home' | 'about' | 'dashboard' | 'messages' | 'proofs' | 'validation' | 'status';
+export type TabId =
+  | 'home'
+  | 'about'
+  | 'dashboard'
+  | 'messages'
+  | 'proofs'
+  | 'validation'
+  | 'status';
 
 export interface Tab {
   id: TabId;

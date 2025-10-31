@@ -7,7 +7,7 @@ export const useBlockNumber = () => {
   const [blockNumber, setBlockNumber] = useState<BlockNumber>({
     block_number: 0,
     status: 'unknown',
-    message_count: 0
+    message_count: 0,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +33,7 @@ export const useBlockNumber = () => {
 
     // Check if auto-refresh is enabled
     const isRefreshEnabled = process.env.ENABLE_BLOCK_REFRESH === 'false';
-    
+
     if (!isRefreshEnabled) {
       return; // Don't set up auto-refresh if disabled
     }
@@ -54,6 +54,6 @@ export const useBlockNumber = () => {
     isLoading,
     error,
     refresh: fetchBlockNumber,
-    isAutoRefreshEnabled: process.env.ENABLE_BLOCK_REFRESH === 'false'
+    isAutoRefreshEnabled: process.env.ENABLE_BLOCK_REFRESH === 'false',
   };
 };

@@ -8,16 +8,12 @@ interface TabNavigationProps {
   onTabChange: (tabId: TabId) => void;
 }
 
-const TabNavigation: React.FC<TabNavigationProps> = ({
-  tabs,
-  activeTab,
-  onTabChange,
-}) => {
+const TabNavigation: React.FC<TabNavigationProps> = ({ tabs, activeTab, onTabChange }) => {
   return (
     <div className="border-b border-gray-200">
       <nav className="-mb-px flex space-x-8 px-6">
         {tabs.map((tab) => (
-          <button 
+          <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
             className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors ${

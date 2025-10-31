@@ -23,11 +23,9 @@ const ProofChainsTab: React.FC<ProofChainsTabProps> = ({
           Load Proof Chain
         </LoadingButton>
       </div>
-      
+
       {!proofChain ? (
-        <EmptyState 
-          message="No proof chain loaded. Use the search filters and click 'Load Proof Chain' to fetch data."
-        />
+        <EmptyState message="No proof chain loaded. Use the search filters and click 'Load Proof Chain' to fetch data." />
       ) : (
         <ProofChainDisplay proofChain={proofChain} />
       )}

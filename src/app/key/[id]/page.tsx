@@ -79,7 +79,7 @@ export default function KeyDetailPage() {
 
     const data = {
       key,
-      microProof
+      microProof,
     };
 
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -99,7 +99,7 @@ export default function KeyDetailPage() {
   };
 
   const getStatusBadge = (status: string) => {
-    const baseClasses = "qproof-badge";
+    const baseClasses = 'qproof-badge';
     switch (status) {
       case 'finalized':
         return `${baseClasses} qproof-badge-finalized`;
@@ -129,10 +129,7 @@ export default function KeyDetailPage() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Key Not Found</h1>
           <p className="text-gray-600 mb-6">The requested key could not be found.</p>
-          <button
-            onClick={() => router.push('/')}
-            className="qproof-btn qproof-btn-primary"
-          >
+          <button onClick={() => router.push('/')} className="qproof-btn qproof-btn-primary">
             Back to Home
           </button>
         </div>
@@ -150,16 +147,13 @@ export default function KeyDetailPage() {
               <span className="hidden sm:inline">Key: {key.initial_key}</span>
               <span className="sm:hidden">Key: {key.initial_key.slice(0, 20)}...</span>
             </h1>
-            <p className="text-gray-600">
-              Public key registration details and associated UTXOs
-            </p>
+            <p className="text-gray-600">Public key registration details and associated UTXOs</p>
           </div>
         </div>
       </div>
 
       <div className="flex-1 min-h-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
           {/* Summary Card */}
           <div className="qproof-card mb-8">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Registration Summary</h2>
@@ -167,7 +161,9 @@ export default function KeyDetailPage() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-600">First Included in Block</label>
+                  <label className="text-sm font-medium text-gray-600">
+                    First Included in Block
+                  </label>
                   <div className="mt-1">
                     <button
                       onClick={() => router.push(`/block/${key.block_number}`)}
@@ -181,9 +177,7 @@ export default function KeyDetailPage() {
                 <div>
                   <label className="text-sm font-medium text-gray-600">Status</label>
                   <div className="mt-1">
-                    <span className={getStatusBadge(key.status)}>
-                      {key.status}
-                    </span>
+                    <span className={getStatusBadge(key.status)}>{key.status}</span>
                   </div>
                 </div>
 
@@ -199,16 +193,15 @@ export default function KeyDetailPage() {
                 <div>
                   <label className="text-sm font-medium text-gray-600">Next Key</label>
                   <div className="mt-1">
-                    {(key.next_key && key.next_key !== '') ? (
+                    {key.next_key && key.next_key !== '' ? (
                       <button
                         onClick={() => router.push(`/key/${key.next_key}`)}
                         className="qproof-link font-mono text-sm underline hover:text-[#00A855]"
                       >
                         {key.next_key.slice(0, 25)}...
-                      </button>) : (
-                      <span className="qproof-badge qproof-badge-pending">
-                        N/A
-                      </span>
+                      </button>
+                    ) : (
+                      <span className="qproof-badge qproof-badge-pending">N/A</span>
                     )}
                   </div>
                 </div>
@@ -256,13 +249,9 @@ export default function KeyDetailPage() {
                             </button>
                           </td>
                           <td>
-                            <span className="qproof-badge qproof-badge-utxo">
-                              UTXO
-                            </span>
+                            <span className="qproof-badge qproof-badge-utxo">UTXO</span>
                           </td>
-                          <td className="font-mono">
-                            N/A
-                          </td>
+                          <td className="font-mono">N/A</td>
                           <td>
                             <button
                               onClick={() => router.push(`/block/${utxo.block_number}`)}
@@ -272,14 +261,10 @@ export default function KeyDetailPage() {
                             </button>
                           </td>
                           <td>
-                            <span className="qproof-badge qproof-badge-pending">
-                              N/A
-                            </span>
+                            <span className="qproof-badge qproof-badge-pending">N/A</span>
                           </td>
                           <td>
-                            <span className="qproof-badge qproof-badge-pending">
-                              N/A
-                            </span>
+                            <span className="qproof-badge qproof-badge-pending">N/A</span>
                           </td>
                           <td>
                             <button
@@ -309,10 +294,7 @@ export default function KeyDetailPage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Actions</h2>
 
             <div className="flex flex-wrap gap-4">
-              <button
-                onClick={handleViewProof}
-                className="qproof-btn qproof-btn-primary"
-              >
+              <button onClick={handleViewProof} className="qproof-btn qproof-btn-primary">
                 Show Full Proof
               </button>
 
@@ -323,10 +305,7 @@ export default function KeyDetailPage() {
                 Download JSON
               </button> */}
 
-              <button
-                onClick={handleCopyLink}
-                className="qproof-btn qproof-btn-secondary"
-              >
+              <button onClick={handleCopyLink} className="qproof-btn qproof-btn-secondary">
                 Copy Link
               </button>
 
@@ -349,7 +328,7 @@ export default function KeyDetailPage() {
               id: key.initial_key,
               block_number: key.block_number,
               created_at: key.created_at,
-              status: key.status
+              status: key.status,
             }}
             microProof={microProof}
             proofChain={proofChain}

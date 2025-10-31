@@ -19,10 +19,10 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
   disabled = false,
 }) => {
   return (
-    <button 
+    <button
       onClick={onClick}
       disabled={isLoading || disabled}
-      className={`${className} ${(isLoading || disabled) ? 'opacity-50 cursor-not-allowed' : ''} transition-opacity`}
+      className={`${className} ${isLoading || disabled ? 'opacity-50 cursor-not-allowed' : ''} transition-opacity`}
     >
       {isLoading ? 'Loading...' : children}
     </button>
@@ -35,7 +35,9 @@ interface StatusBadgeProps {
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusClass(status)}`}>
+    <span
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusClass(status)}`}
+    >
       {status}
     </span>
   );

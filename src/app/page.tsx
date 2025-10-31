@@ -14,13 +14,13 @@ import ProofModal from '@/components/modals/ProofModal';
 export default function HomePage() {
   const router = useRouter();
   const { setCurrentBlock, setTipBlock } = useBlockContext();
-  
+
   const [inclusions, setInclusions] = useState<Inclusion[]>([]);
   const [currentBlock, setCurrentBlockLocal] = useState<number>(0);
   const [inclusionCount, setInclusionCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const { showToast } = useToast();
-  
+
   const [selectedInclusion, setSelectedInclusion] = useState<Inclusion | null>(null);
   const [isProofModalOpen, setIsProofModalOpen] = useState(false);
   const [microProof, setMicroProof] = useState<MicroProof | null>(null);
@@ -31,18 +31,17 @@ export default function HomePage() {
     const loadData = async () => {
       try {
         setLoading(true);
-        
+
         // Load current block status
         const blockStatus = await ApiService.getCurrentBlockStatus();
         setCurrentBlockLocal(blockStatus.block_number);
         setCurrentBlock(blockStatus.block_number);
         setTipBlock(blockStatus.block_number + 3);
         setInclusionCount(blockStatus.inclusion_count);
-        
+
         // Load live inclusions
         const liveData = await ApiService.getLiveInclusions();
         setInclusions(liveData.inclusions);
-        
       } catch (err) {
         console.error('Error loading data:', err);
         // setError('Failed to load live data. Please try again.');
@@ -58,7 +57,7 @@ export default function HomePage() {
       try {
         const liveData = await ApiService.getLiveInclusions();
         setInclusions(liveData.inclusions);
-        
+
         const blockStatus = await ApiService.getCurrentBlockStatus();
         setCurrentBlockLocal(blockStatus.block_number);
         setCurrentBlock(blockStatus.block_number);
@@ -86,10 +85,10 @@ export default function HomePage() {
 
   const handleViewProof = async (inclusion: Inclusion) => {
     setSelectedInclusion(inclusion);
-    
+
     try {
       let proofInfo;
-      
+
       // Get thread and leaf information based on inclusion type
       if (inclusion.type === 'utxo') {
         proofInfo = await ApiService.getUTXOProofInfo(inclusion.id);
@@ -98,7 +97,7 @@ export default function HomePage() {
       } else {
         throw new Error('Unknown inclusion type');
       }
-      
+
       // Load microproof data using resolved thread and leaf
       const proof = await ApiService.getProof(
         proofInfo.block_number.toString(),
@@ -106,7 +105,7 @@ export default function HomePage() {
         proofInfo.leaf_index.toString()
       );
       setMicroProof(proof);
-      
+
       // If finalized, also load proofchain
       if (inclusion.status === 'finalized') {
         const proofchain = await ApiService.getProofchain(
@@ -118,7 +117,7 @@ export default function HomePage() {
       } else {
         setProofChain(null);
       }
-      
+
       setIsProofModalOpen(true);
     } catch (err) {
       console.error('Error loading proof:', err);
@@ -137,9 +136,9 @@ export default function HomePage() {
     const data = {
       inclusion: selectedInclusion,
       microProof,
-      proofChain
+      proofChain,
     };
-    
+
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -159,18 +158,17 @@ export default function HomePage() {
   const handleRefresh = async () => {
     try {
       setLoading(true);
-      
+
       // Load current block status
       const blockStatus = await ApiService.getCurrentBlockStatus();
       setCurrentBlockLocal(blockStatus.block_number);
       setCurrentBlock(blockStatus.block_number);
       setTipBlock(blockStatus.block_number + 3);
       setInclusionCount(blockStatus.inclusion_count);
-      
+
       // Load live inclusions
       const liveData = await ApiService.getLiveInclusions();
       setInclusions(liveData.inclusions);
-      
     } catch (err) {
       console.error('Error refreshing data:', err);
       showToast('Failed to refresh data. Please try again.', 'error');
@@ -179,15 +177,16 @@ export default function HomePage() {
     }
   };
 
-  const estimatedFinalization = currentBlock && inclusions ? 
-    `${Math.max(0, 6 - (inclusions.filter(i => i.status === 'pending').length))} minutes` : 
-    undefined;
+  const estimatedFinalization =
+    currentBlock && inclusions
+      ? `${Math.max(0, 6 - inclusions.filter((i) => i.status === 'pending').length)} minutes`
+      : undefined;
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center justify-center bg-white">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00CA65] mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#f3f4f5] mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading live data...</p>
         </div>
       </div>
@@ -201,9 +200,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-4 sm:px-0">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                Live Block Inclusions
-              </h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Live Block Inclusions</h1>
               <p className="text-gray-600">
                 Watch inclusions being added to the current block in real-time
               </p>
@@ -211,15 +208,20 @@ export default function HomePage() {
             <button
               onClick={handleRefresh}
               disabled={loading}
-              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-[#00CA65] hover:text-white hover:border-[#00CA65] focus:outline-none focus:ring-2 focus:ring-[#00CA65] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center justify-center space-x-2 px-4 py-2 w-full sm:w-auto text-sm font-medium text-[#00CA65] bg-[#dcffe1] border border-[#00CA65] rounded-md hover:bg-[#dcffe1] focus:outline-none focus:ring-2 focus:ring-[#00CA65] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              <svg 
-                className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} 
-                fill="none" 
-                stroke="currentColor" 
+              <svg
+                className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`}
+                fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
               </svg>
               <span>Refresh</span>
             </button>

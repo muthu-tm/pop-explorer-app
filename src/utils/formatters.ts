@@ -3,11 +3,11 @@ import { StatusType } from '@/types';
 
 export const formatHash = (hash: string | string[]): string => {
   if (!hash) return 'N/A';
-  
+
   if (typeof hash === 'string') {
     return hash.length > 16 ? hash.substring(0, 16) + '...' : hash;
   }
-  
+
   return hash.length > 16 ? hash.slice(0, 16).join('') + '...' : hash.join('');
 };
 
@@ -23,7 +23,7 @@ export const getStatusClass = (status: StatusType): string => {
     case 'pending':
       return 'bg-yellow-100 text-yellow-800';
     case 'skipped':
-      return 'bg-gray-100 text-gray-800';
+      return 'bg-[#ffe2e2] text-[#f36d73]';
     default:
       return 'bg-gray-100 text-gray-800';
   }

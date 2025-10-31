@@ -3,8 +3,16 @@ import { useState, useCallback } from 'react';
 import { AlertState } from '@/types';
 
 export const useAlerts = () => {
-  const [errorAlert, setErrorAlert] = useState<AlertState>({ show: false, message: '', type: 'error' });
-  const [successAlert, setSuccessAlert] = useState<AlertState>({ show: false, message: '', type: 'success' });
+  const [errorAlert, setErrorAlert] = useState<AlertState>({
+    show: false,
+    message: '',
+    type: 'error',
+  });
+  const [successAlert, setSuccessAlert] = useState<AlertState>({
+    show: false,
+    message: '',
+    type: 'success',
+  });
 
   const showError = useCallback((message: string) => {
     setErrorAlert({ show: true, message, type: 'error' });

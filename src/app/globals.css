@@ -1,15 +1,15 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --primary: #00CA65;
-  --primary-dark: #00A855;
-  --primary-light: #4DD885;
+  --primary: #00ca65;
+  --primary-dark: #00a855;
+  --primary-light: #4dd885;
   --secondary: #f8f9fa;
   --border: #e9ecef;
   --text-muted: #6c757d;
-  --success: #00CA65;
+  --success: #00ca65;
   --warning: #ffc107;
   --danger: #dc3545;
   --info: #17a2b8;
@@ -36,7 +36,9 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-weight: 400;
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family:
+    ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
 }
 
 /* QProof Explorer specific styles */
@@ -113,8 +115,9 @@ body {
   border-collapse: collapse;
   background: white;
   border-radius: 0.5rem;
-  overflow: hidden;
+  /* overflow: hidden; */
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border);
 }
 
 .qproof-table th {
@@ -122,7 +125,6 @@ body {
   padding: 1rem;
   text-align: left;
   font-weight: 600;
-  color: var(--foreground);
   border-bottom: 1px solid var(--border);
 }
 
@@ -132,7 +134,7 @@ body {
 }
 
 .qproof-table tr:hover {
-  background-color: #f8f9fa;
+  background-color: #f9fafc;
 }
 
 /* Card styles */
@@ -142,6 +144,11 @@ body {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
   margin-bottom: 1rem;
+}
+
+/* Variant: muted card with light gray background */
+.qproof-card-muted {
+  background: #f9fafc;
 }
 
 /* Button styles */

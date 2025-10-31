@@ -22,23 +22,26 @@ A modern Next.js dashboard application for exploring QDIP proofs, messages, and 
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd pop-explorer-app
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -96,6 +99,26 @@ src/
 - **TypeScript**: Full type safety for all components and data structures
 - **ESLint**: Code quality and consistency enforcement
 - **Tailwind CSS**: Utility-first CSS framework for rapid UI development
+
+## Code Formatting
+
+This project uses Prettier for code formatting with 4 spaces for indentation. Configuration is defined in `.prettierrc` and `.editorconfig`.
+
+### Format Code
+
+To format all files in the project:
+
+```bash
+npm run format
+```
+
+### Formatting Rules
+
+- **Indentation**: 4 spaces (no tabs)
+- **Quote Style**: Single quotes
+- **Semicolons**: Always included
+- **Trailing Commas**: ES5 compatible
+- **Print Width**: 100 characters
 
 ## Contributing
 

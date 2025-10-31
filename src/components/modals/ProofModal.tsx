@@ -20,7 +20,7 @@ export default function ProofModal({
   microProof,
   proofChain,
   onDownloadJSON,
-  onCopyLink
+  onCopyLink,
 }: ProofModalProps) {
   const [activeTab, setActiveTab] = useState<'microproof' | 'proofchain'>('microproof');
 
@@ -30,15 +30,15 @@ export default function ProofModal({
     <div className="qproof-modal-overlay" onClick={onClose}>
       <div className="qproof-modal" onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
-            Proof Details
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-          >
+          <h2 className="text-2xl font-bold text-gray-900">Proof Details</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -88,7 +88,9 @@ export default function ProofModal({
               <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Block Number:</span>
-                  <span className="font-mono">#{microProof.block_header.block_number.toLocaleString()}</span>
+                  <span className="font-mono">
+                    #{microProof.block_header.block_number.toLocaleString()}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Status:</span>
@@ -109,7 +111,9 @@ export default function ProofModal({
               <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Block Number:</span>
-                  <span className="font-mono">#{microProof.subject.block_number.toLocaleString()}</span>
+                  <span className="font-mono">
+                    #{microProof.subject.block_number.toLocaleString()}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Thread ID:</span>
@@ -172,9 +176,11 @@ export default function ProofModal({
                 ) : (
                   <span className="text-red-600 text-xl">❌</span>
                 )}
-                <span className={`font-medium ${
-                  microProof.verification.valid ? 'text-green-600' : 'text-red-600'
-                }`}>
+                <span
+                  className={`font-medium ${
+                    microProof.verification.valid ? 'text-green-600' : 'text-red-600'
+                  }`}
+                >
                   {microProof.verification.valid ? 'Verified' : 'Failed Verification'}
                 </span>
               </div>
@@ -190,9 +196,11 @@ export default function ProofModal({
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Verification Status:</span>
-                  <span className={`font-mono ${
-                    microProof.verification.valid ? 'text-green-600' : 'text-red-600'
-                  }`}>
+                  <span
+                    className={`font-mono ${
+                      microProof.verification.valid ? 'text-green-600' : 'text-red-600'
+                    }`}
+                  >
                     {microProof.verification.valid ? 'Valid' : 'Invalid'}
                   </span>
                 </div>
@@ -258,16 +266,10 @@ export default function ProofModal({
 
         {/* Actions */}
         <div className="flex justify-end space-x-3 mt-8 pt-6 border-t border-gray-200">
-          <button
-            onClick={onCopyLink}
-            className="qproof-btn qproof-btn-secondary"
-          >
+          <button onClick={onCopyLink} className="qproof-btn qproof-btn-secondary">
             Copy Link
           </button>
-          <button
-            onClick={onDownloadJSON}
-            className="qproof-btn qproof-btn-primary"
-          >
+          <button onClick={onDownloadJSON} className="qproof-btn qproof-btn-primary">
             Download JSON
           </button>
         </div>

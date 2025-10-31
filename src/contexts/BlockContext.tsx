@@ -16,12 +16,14 @@ export function BlockProvider({ children }: { children: ReactNode }) {
   const [tipBlock, setTipBlock] = useState<number | null>(null);
 
   return (
-    <BlockContext.Provider value={{
-      currentBlock,
-      tipBlock,
-      setCurrentBlock,
-      setTipBlock
-    }}>
+    <BlockContext.Provider
+      value={{
+        currentBlock,
+        tipBlock,
+        setCurrentBlock,
+        setTipBlock,
+      }}
+    >
       {children}
     </BlockContext.Provider>
   );

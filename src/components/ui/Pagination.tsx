@@ -9,18 +9,22 @@ interface PaginationProps {
   className?: string;
 }
 
-export default function Pagination({ 
-  currentPage, 
-  totalPages, 
-  onPageChange, 
-  className = '' 
+export default function Pagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+  className = '',
 }: PaginationProps) {
   const getVisiblePages = () => {
     const delta = 2;
     const range = [];
     const rangeWithDots = [];
 
-    for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+    for (
+      let i = Math.max(2, currentPage - delta);
+      i <= Math.min(totalPages - 1, currentPage + delta);
+      i++
+    ) {
       range.push(i);
     }
 
@@ -55,7 +59,7 @@ export default function Pagination({
         >
           Previous
         </button>
-        
+
         <div className="flex items-center space-x-1">
           {getVisiblePages().map((page, index) => (
             <React.Fragment key={index}>
@@ -76,7 +80,7 @@ export default function Pagination({
             </React.Fragment>
           ))}
         </div>
-        
+
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
@@ -85,7 +89,7 @@ export default function Pagination({
           Next
         </button>
       </div>
-      
+
       <div className="text-[0.5rem] sm:text-sm text-gray-500 mt-2 sm:mt-0">
         Page {currentPage} of {totalPages}
       </div>

@@ -1,28 +1,28 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Footer from "@/components/layout/Footer";
-import ErrorBoundary from "@/components/error/ErrorBoundary";
-import LayoutWrapper from "@/components/layout/LayoutWrapper";
-import { BlockProvider } from "@/contexts/BlockContext";
-import { ToastProvider } from "@/contexts/ToastContext";
-import ToastContainer from "@/components/ui/ToastContainer";
-import IntroVideo from "@/components/ui/SplashScreen";
-import ClientWrapper from "@/components/ui/ClientWrapper";
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
+import Footer from '@/components/layout/Footer';
+import ErrorBoundary from '@/components/error/ErrorBoundary';
+import LayoutWrapper from '@/components/layout/LayoutWrapper';
+import { BlockProvider } from '@/contexts/BlockContext';
+import { ToastProvider } from '@/contexts/ToastContext';
+import ToastContainer from '@/components/ui/ToastContainer';
+import IntroVideo from '@/components/ui/SplashScreen';
+import ClientWrapper from '@/components/ui/ClientWrapper';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "QProof Explorer - Verifiable Bitcoin Provenance",
-  description: "⚡ QProof Explorer - Verifiable Bitcoin Provenance, Made Simple",
+  title: 'QProof Explorer - Verifiable Bitcoin Provenance',
+  description: '⚡ QProof Explorer - Verifiable Bitcoin Provenance, Made Simple',
   keywords: ['QProof', 'Bitcoin', 'Blockchain', 'Explorer', 'Quantum-Resistant'],
   authors: [{ name: 'QProof Team' }],
   viewport: 'width=device-width, initial-scale=1',
@@ -69,14 +69,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col`}
       >
-      <IntroVideo />
+        <IntroVideo />
         <ErrorBoundary>
           <ToastProvider>
             <BlockProvider>
               <LayoutWrapper>
-                <ClientWrapper>
-                  {children}
-                </ClientWrapper>
+                <ClientWrapper>{children}</ClientWrapper>
               </LayoutWrapper>
             </BlockProvider>
             <ToastContainer />

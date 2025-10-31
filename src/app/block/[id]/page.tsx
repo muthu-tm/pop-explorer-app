@@ -20,24 +20,28 @@ export default function BlockDetailPage() {
   const [microProof, setMicroProof] = useState<MicroProof | null>(null);
   const [proofChain, setProofChain] = useState<ProofChain | null>(null);
 
-  useEffect(() => {
-    const loadBlock = async () => {
-      try {
-        setLoading(true);
-        const response = await ApiService.getBlock(blockNumber);
-        setBlock(response.block);
-        setInclusions(response.inclusions || []);
-      } catch (error) {
-        console.error('Error loading block:', error);
-        setBlock(null);
-        setInclusions([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const loadBlock = async () => {
+    try {
+      setLoading(true);
+      const response = await ApiService.getBlock(blockNumber);
+      setBlock(response.block);
+      setInclusions(response.inclusions || []);
+    } catch (error) {
+      console.error('Error loading block:', error);
+      setBlock(null);
+      setInclusions([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     loadBlock();
   }, [blockNumber]);
+
+  const handleRefresh = () => {
+    loadBlock();
+  };
 
   const handleViewUTXO = (utxoId: string) => {
     router.push(`/utxo/${utxoId}`);
@@ -49,10 +53,10 @@ export default function BlockDetailPage() {
 
   const handleViewProof = async (inclusion: Inclusion) => {
     setSelectedInclusion(inclusion);
-    
+
     try {
       let proofInfo;
-      
+
       // Get thread and leaf information based on inclusion type
       if (inclusion.type === 'utxo') {
         proofInfo = await ApiService.getUTXOProofInfo(inclusion.id);
@@ -61,7 +65,7 @@ export default function BlockDetailPage() {
       } else {
         throw new Error('Unknown inclusion type');
       }
-      
+
       // Load microproof data using resolved thread and leaf
       const proof = await ApiService.getProof(
         proofInfo.block_number.toString(),
@@ -69,7 +73,7 @@ export default function BlockDetailPage() {
         proofInfo.leaf_index.toString()
       );
       setMicroProof(proof);
-      
+
       // If finalized, also load proofchain
       if (inclusion.status === 'finalized') {
         const proofchain = await ApiService.getProofchain(
@@ -81,7 +85,7 @@ export default function BlockDetailPage() {
       } else {
         setProofChain(null);
       }
-      
+
       setIsProofModalOpen(true);
     } catch (err) {
       console.error('Error loading proof:', err);
@@ -98,9 +102,9 @@ export default function BlockDetailPage() {
   const handleDownloadJSON = () => {
     const data = {
       inclusion: selectedInclusion,
-      microProof
+      microProof,
     };
-    
+
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -116,7 +120,6 @@ export default function BlockDetailPage() {
     const url = `${window.location.origin}/${selectedInclusion?.type.toLowerCase()}/${selectedInclusion?.id}`;
     navigator.clipboard.writeText(url);
   };
-
 
   if (loading) {
     return (
@@ -135,10 +138,7 @@ export default function BlockDetailPage() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Block Not Found</h1>
           <p className="text-gray-600 mb-6">The requested block could not be found.</p>
-          <button
-            onClick={() => router.push('/')}
-            className="qproof-btn qproof-btn-primary"
-          >
+          <button onClick={() => router.push('/')} className="qproof-btn qproof-btn-primary">
             Back to Home
           </button>
         </div>
@@ -151,13 +151,33 @@ export default function BlockDetailPage() {
       {/* Full-width header */}
       <div className="border-gray-200">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <div className="mb-6">
-            <h1 className="text-2xl sm:text-xl font-bold text-gray-900 mb-2">
-              Block: #{block.block_number.toLocaleString()}
-            </h1>
-            <p className="text-gray-600">
-              Block details and statistics
-            </p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                Block: #{block.block_number.toLocaleString()}
+              </h1>
+              <p className="text-gray-600">Block details and statistics</p>
+            </div>
+            <button
+              onClick={handleRefresh}
+              disabled={loading}
+              className="flex  justify-center space-x-2 px-4 py-2 w-full sm:w-auto text-sm font-medium text-[#00CA65] bg-[#dcffe1] border border-[#00CA65] rounded-md hover:bg-[#dcffe1] focus:outline-none focus:ring-2 focus:ring-[#00CA65] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <svg
+                className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+              </svg>
+              <span>Refresh</span>
+            </button>
           </div>
         </div>
       </div>
@@ -166,16 +186,21 @@ export default function BlockDetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Summary Card */}
           <div className="qproof-card mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Block Summary</h2>
-            
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Block Summary</h2>
+
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div>
                 <label className="text-sm font-medium text-gray-600">Status</label>
                 <div className="mt-1">
-                  <span className={`qproof-badge ${
-                    block.status === 'finalized' ? 'qproof-badge-finalized' : 
-                    block.status === 'pending' ? 'qproof-badge-pending' : 'qproof-badge-reorged'
-                  }`}>
+                  <span
+                    className={`qproof-badge ${
+                      block.status === 'finalized'
+                        ? 'qproof-badge-finalized'
+                        : block.status === 'pending'
+                          ? 'qproof-badge-pending'
+                          : 'qproof-badge-reorged'
+                    }`}
+                  >
                     {block.status}
                   </span>
                 </div>
@@ -183,23 +208,17 @@ export default function BlockDetailPage() {
 
               <div>
                 <label className="text-sm font-medium text-gray-600">UTXO Count</label>
-                <div className="mt-1 text-2xl font-bold text-[#00CA65]">
-                  {block.utxo_count}
-                </div>
+                <div className="mt-1 text-2xl font-bold text-[#00CA65]">{block.utxo_count}</div>
               </div>
 
               <div>
                 <label className="text-sm font-medium text-gray-600">Key Count</label>
-                <div className="mt-1 text-2xl font-bold text-[#00CA65]">
-                  {block.key_count}
-                </div>
+                <div className="mt-1 text-2xl font-bold text-[#00CA65]">{block.key_count}</div>
               </div>
 
               <div>
                 <label className="text-sm font-medium text-gray-600">Message Count</label>
-                <div className="mt-1 text-2xl font-bold text-[#00CA65]">
-                  {block.message_count}
-                </div>
+                <div className="mt-1 text-2xl font-bold text-[#00CA65]">{block.message_count}</div>
               </div>
             </div>
           </div>

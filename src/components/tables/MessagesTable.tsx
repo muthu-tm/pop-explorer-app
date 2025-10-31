@@ -47,9 +47,7 @@ const MessagesTable: React.FC<MessagesTableProps> = ({ messages }) => {
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {msg.block_number}
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {msg.thread_id}
-              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{msg.thread_id}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {msg.leaf_index}
               </td>

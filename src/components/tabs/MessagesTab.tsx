@@ -10,11 +10,7 @@ interface MessagesTabProps {
   isLoading: boolean;
 }
 
-const MessagesTab: React.FC<MessagesTabProps> = ({
-  messages,
-  onLoadMessages,
-  isLoading,
-}) => {
+const MessagesTab: React.FC<MessagesTabProps> = ({ messages, onLoadMessages, isLoading }) => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -23,11 +19,9 @@ const MessagesTab: React.FC<MessagesTabProps> = ({
           Load Messages
         </LoadingButton>
       </div>
-      
+
       {messages.length === 0 ? (
-        <EmptyState 
-          message="No messages found. Use the search filters above or click 'Load Messages' to fetch data."
-        />
+        <EmptyState message="No messages found. Use the search filters above or click 'Load Messages' to fetch data." />
       ) : (
         <MessagesTable messages={messages} />
       )}

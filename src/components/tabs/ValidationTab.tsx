@@ -23,11 +23,9 @@ const ValidationTab: React.FC<ValidationTabProps> = ({
           Validate Proof
         </LoadingButton>
       </div>
-      
+
       {!validationResult ? (
-        <EmptyState 
-          message="No validation result. Use the search filters and click 'Validate Proof' to validate a proof chain."
-        />
+        <EmptyState message="No validation result. Use the search filters and click 'Validate Proof' to validate a proof chain." />
       ) : (
         <ValidationDisplay validationResult={validationResult} />
       )}
