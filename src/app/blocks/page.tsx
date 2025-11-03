@@ -111,7 +111,7 @@ export default function BlocksPage() {
         <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="qproof-card">
-              <div className="flex items-center">
+              <div className="flex items-start">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-blue-100 rounded-md flex items-center justify-center">
                     <svg
@@ -139,7 +139,7 @@ export default function BlocksPage() {
             </div>
 
             <div className="qproof-card">
-              <div className="flex items-center">
+              <div className="flex items-start">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-green-100 rounded-md flex items-center justify-center">
                     <svg
@@ -160,14 +160,14 @@ export default function BlocksPage() {
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Finalized</p>
                   <p className="text-2xl font-semibold text-gray-900">
-                    {allBlockStatus.filter((b) => b.status === 'finalized').length}
+                    {allBlockStatus.filter((b) => b.status === 'finalized').length.toLocaleString()}
                   </p>
                 </div>
               </div>
             </div>
 
             <div className="qproof-card">
-              <div className="flex items-center">
+              <div className="flex items-start">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-yellow-100 rounded-md flex items-center justify-center">
                     <svg
@@ -188,14 +188,14 @@ export default function BlocksPage() {
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Pending</p>
                   <p className="text-2xl font-semibold text-gray-900">
-                    {allBlockStatus.filter((b) => b.status === 'pending').length}
+                    {allBlockStatus.filter((b) => b.status === 'pending').length.toLocaleString()}
                   </p>
                 </div>
               </div>
             </div>
 
             <div className="qproof-card">
-              <div className="flex items-center">
+              <div className="flex items-start">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-red-100 rounded-md flex items-center justify-center">
                     <svg
@@ -216,7 +216,7 @@ export default function BlocksPage() {
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Skipped</p>
                   <p className="text-2xl font-semibold text-gray-900">
-                    {allBlockStatus.filter((b) => b.status === 'skipped').length}
+                    {allBlockStatus.filter((b) => b.status === 'skipped').length.toLocaleString()}
                   </p>
                 </div>
               </div>

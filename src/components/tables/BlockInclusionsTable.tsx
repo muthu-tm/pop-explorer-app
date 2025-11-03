@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { TbArrowsDownUp } from 'react-icons/tb';
 import { Inclusion } from '@/types';
 
 interface BlockInclusionsTableProps {
@@ -124,7 +123,7 @@ export default function BlockInclusionsTable({
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-lg border border-[#e9ecef]">
         <table className="qproof-table">
           <thead>
             <tr>
@@ -134,9 +133,9 @@ export default function BlockInclusionsTable({
               >
                 <div className="flex items-center space-x-1">
                   <span className="text-transform-uppercase text-sm">Type</span>
-                  <TbArrowsDownUp
-                    className={`w-4 h-4 ${sortBy === 'type' ? 'text-black' : 'text-[#6a7282]'}`}
-                  />
+                  {sortBy === 'type' && (
+                    <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                  )}
                 </div>
               </th>
               <th
@@ -145,9 +144,9 @@ export default function BlockInclusionsTable({
               >
                 <div className="flex items-center space-x-1">
                   <span className="text-transform-uppercase text-sm">ID</span>
-                  <TbArrowsDownUp
-                    className={`w-4 h-4 ${sortBy === 'id' ? 'text-black' : 'text-[#6a7282]'}`}
-                  />
+                  {sortBy === 'id' && (
+                    <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                  )}
                 </div>
               </th>
               <th
@@ -156,9 +155,9 @@ export default function BlockInclusionsTable({
               >
                 <div className="flex items-center space-x-1">
                   <span className="text-transform-uppercase text-sm">Created At</span>
-                  <TbArrowsDownUp
-                    className={`w-4 h-4 ${sortBy === 'created_at' ? 'text-black' : 'text-[#6a7282]'}`}
-                  />
+                  {sortBy === 'created_at' && (
+                    <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                  )}
                 </div>
               </th>
               <th
@@ -167,9 +166,9 @@ export default function BlockInclusionsTable({
               >
                 <div className="flex items-center space-x-1">
                   <span className="text-transform-uppercase text-sm">Status</span>
-                  <TbArrowsDownUp
-                    className={`w-4 h-4 ${sortBy === 'status' ? 'text-black' : 'text-[#6a7282]'}`}
-                  />
+                  {sortBy === 'status' && (
+                    <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                  )}
                 </div>
               </th>
               <th className="text-transform-uppercase text-sm text-gray-500">Action</th>

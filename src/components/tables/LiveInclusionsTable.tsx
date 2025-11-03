@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { TbArrowsDownUp } from 'react-icons/tb';
 import { Inclusion } from '@/types';
 
 interface LiveInclusionsTableProps {
@@ -131,55 +130,55 @@ export default function LiveInclusionsTable({
         </div>
 
         {/* Table */}
-        <div className="flex-1  overflow-auto">
+        <div className="flex-1 overflow-auto rounded-lg border border-[#e9ecef]">
           <table className="qproof-table">
             <thead>
               <tr>
                 <th
-                  className={`cursor-pointer hover:bg-gray-100 uppercase ${sortBy === 'type' ? 'text-black' : 'text-gray-500'}`}
+                  className={`cursor-pointer hover:bg-gray-100 uppercase   ${sortBy === 'type' ? 'text-black' : 'text-gray-500'}`}
                   onClick={() => handleSort('type')}
                 >
                   <div className="flex items-center space-x-1">
                     <span className="text-transform-uppercase text-sm">Type</span>
-                    <TbArrowsDownUp
-                      className={`w-4 h-4 ${sortBy === 'type' ? 'text-black' : 'text-[#6a7282]'}`}
-                    />
+                    {sortBy === 'type' && (
+                      <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                    )}
                   </div>
                 </th>
                 <th
-                  className={`cursor-pointer hover:bg-gray-100 uppercase ${sortBy === 'blockNumber' ? 'text-black' : 'text-gray-500'}`}
+                  className={`cursor-pointer hover:bg-gray-100 uppercase  ${sortBy === 'blockNumber' ? 'text-black' : 'text-gray-500'}`}
                   onClick={() => handleSort('blockNumber')}
                 >
                   <div className="flex items-center space-x-1">
                     <span className="text-transform-uppercase text-sm">ID</span>
-                    <TbArrowsDownUp
-                      className={`w-4 h-4 ${sortBy === 'blockNumber' ? 'text-black' : 'text-[#6a7282]'}`}
-                    />
+                    {sortBy === 'blockNumber' && (
+                      <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                    )}
                   </div>
                 </th>
                 <th className="cursor-pointer text-gray-500 hover:bg-gray-100 uppercase">
                   Since Block
                 </th>
                 <th
-                  className={`cursor-pointer hover:bg-gray-100 uppercase ${sortBy === 'status' ? 'text-black' : 'text-gray-500'}`}
+                  className={`cursor-pointer hover:bg-gray-100 uppercase  ${sortBy === 'status' ? 'text-black' : 'text-gray-500'}`}
                   onClick={() => handleSort('status')}
                 >
                   <div className="flex items-center space-x-1">
                     <span className="text-transform-uppercase text-sm">Status</span>
-                    <TbArrowsDownUp
-                      className={`w-4 h-4 ${sortBy === 'status' ? 'text-black' : 'text-[#6a7282]'}`}
-                    />
+                    {sortBy === 'status' && (
+                      <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                    )}
                   </div>
                 </th>
                 <th
-                  className={`cursor-pointer hover:bg-gray-100 uppercase ${sortBy === 'createdAt' ? 'text-black' : 'text-gray-500'}`}
+                  className={`cursor-pointer hover:bg-gray-100 uppercase  ${sortBy === 'createdAt' ? 'text-black' : 'text-gray-500'}`}
                   onClick={() => handleSort('createdAt')}
                 >
                   <div className="flex items-center space-x-1">
                     <span className="text-transform-uppercase text-sm">Created At</span>
-                    <TbArrowsDownUp
-                      className={`w-4 h-4 ${sortBy === 'createdAt' ? 'text-black' : 'text-[#6a7282]'}`}
-                    />
+                    {sortBy === 'createdAt' && (
+                      <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                    )}
                   </div>
                 </th>
               </tr>
